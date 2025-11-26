@@ -23,6 +23,7 @@
             grid-template-rows: auto 1fr;
             gap: 12px;
         }
+
         /* === MACHINE BOXES === */
         .machines {
             display: grid;
@@ -47,6 +48,7 @@
         .tipper { border-top: 6px solid #2ecc71; }
         .exc { border-top: 6px solid #f39c12; }
         .load { border-top: 6px solid #9b59b6; }
+
         /* === MAIN CONTENT AREA === */
         .main-area {
             display: grid;
@@ -54,7 +56,8 @@
             gap: 12px;
             height: 100%;
         }
-        /* === NEW QUARRY OPERATIONS CARD (White background with colors) === */
+
+        /* === QUARRY OPERATIONS CARD (White background) === */
         .quarry-card {
             background: white;
             color: #1e1e2f;
@@ -75,31 +78,44 @@
             padding-bottom: 8px;
             border-bottom: 3px solid #0d4d96;
         }
+
+        /* Updated: 5 smaller uniform white cards with distinct colored borders */
         .quarry-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 14px;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr; /* 3 rows to fit 5 items nicely */
+            gap: 12px;
         }
         .q-item {
-            background: #f8f9fa;
+            background: #ffffff;
             border-radius: 10px;
-            padding: 12px;
+            padding: 14px 12px;
             text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
             border-left: 6px solid;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            height: 100px;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
-        .q-item.trips { border-left-color: #3498db; }
-        .q-item.tonnage { border-left-color: #e67e22; }
-        .q-item.stock { border-left-color: #27ae60; }
-        .q-item.added { border-left-color: #9b59b6; }
-        .q-item.feeder { border-left-color: #e74c3c; }
-        .q-label { font-size: 0.85rem; opacity: 0.8; margin-bottom: 6px; }
-        .q-value { font-size: 1.6rem; font-weight: bold; }
+        .q-label { 
+            font-size: 0.85rem; 
+            opacity: 0.8; 
+            margin-bottom: 6px; 
+            font-weight: 600;
+        }
+        .q-value { 
+            font-size: 1.7rem; 
+            font-weight: bold; 
+            color: #2c3e50;
+        }
+
+        /* Different colors for each department */
+        .q-item.trips     { border-left-color: #3498db; }   /* Blue - Transport */
+        .q-item.tonnage   { border-left-color: #e67e22; }   /* Orange - Production */
+        .q-item.added     { border-left-color: #9b59b6; }   /* Purple - Loading */
+        .q-item.stock     { border-left-color: #27ae60; }   /* Green - Inventory */
+        .q-item.feeder    { border-left-color: #e74c3c; }   /* Red - Crusher/Feeder */
+
         /* === RIGHT COLUMN === */
         .right-column {
             display: grid;
@@ -130,14 +146,15 @@
         }
         .item-label { font-size: 0.9rem; opacity: 0.9; }
         .item-value { font-size: 1.6rem; font-weight: bold; margin-top: 6px; }
+
         /* Responsive */
         @media (max-width: 1400px) {
             .main-area { grid-template-columns: 1fr; }
-            .quarry-card { order: -1; height: 340px; }
+            .quarry-card { order: -1; height: 320px; }
         }
         @media (max-width: 900px) {
             .machines, #production { grid-template-columns: 1fr 1fr; }
-            .quarry-grid { grid-template-columns: 1fr; }
+            .quarry-grid { grid-template-columns: 1fr; grid-template-rows: repeat(5, 1fr); }
             .bottom-row { grid-template-columns: 1fr; }
         }
     </style>
@@ -164,9 +181,10 @@
                 <div class="mach-value" id="load">2/2</div>
             </div>
         </div>
+
         <!-- Main Content -->
         <div class="main-area">
-            <!-- Left: New Detailed Quarry Operations Card (White BG) -->
+            <!-- Quarry Operations - Updated with 5 cards -->
             <div class="quarry-card">
                 <h2>Quarry Operations</h2>
                 <div class="quarry-grid">
@@ -175,23 +193,24 @@
                         <div class="q-value" id="trips">36</div>
                     </div>
                     <div class="q-item tonnage">
-                        <div class="q-label">Boulder Tonnage</div>
+                        <div class="q-label">Boulder Tonnage Today</div>
                         <div class="q-value" id="boulder-today">963 T</div>
+                    </div>
+                    <div class="q-item added">
+                        <div class="q-label">Boulder Added to Stock</div>
+                        <div class="q-value" id="boulder-added">963 T</div>
                     </div>
                     <div class="q-item stock">
                         <div class="q-label">Boulder Stock at Plant</div>
                         <div class="q-value" id="boulder-stock">12,676 T</div>
                     </div>
-                    <div class="q-item added">
-                        <div class="q-label">Boulder Added To Stock</div>
-                        <div class="q-value" id="boulder-added">963 T</div>
-                    </div>
                     <div class="q-item feeder">
-                        <div class="q-label">Total Boulder Feeder to Plant</div>
-                        <div class="q-value" id="boulder-feeder">1,200 T</div>
+                        <div class="q-label">Total Boulder Fed to Plant</div>
+                        <div class="q-value" id="boulder-fed">1,248 T</div>
                     </div>
                 </div>
             </div>
+
             <!-- Right Column -->
             <div class="right-column">
                 <!-- Production Today -->
@@ -202,6 +221,7 @@
                     <div class="item"><div class="item-label">River Sand</div><div class="item-value" id="psand">115 T</div></div>
                     <div class="item"><div class="item-label">M Sand</div><div class="item-value" id="msand">140 T</div></div>
                 </div>
+
                 <!-- Dispatch + Stock -->
                 <div class="bottom-row">
                     <div class="section">
@@ -226,26 +246,30 @@
             </div>
         </div>
     </div>
+
     <script>
         function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
        
         function update() {
-            // Existing updates...
+            // Machine updates
             document.getElementById('comp').textContent = 10 + rand(0,3);
             document.getElementById('tipper').textContent = `${8+rand(0,4)}/12`;
             document.getElementById('exc').textContent = `${4+rand(0,1)}/5`;
             document.getElementById('load').textContent = `2/2`;
-            // New Quarry Operations live updates
-            const trips = 30 + rand(0, 15);
-            const boulderToday = 920 + rand(0, 80);
-            const boulderStock = 12600 + rand(-200, 300);
-            const boulderAdded = boulderToday; // same as today's tonnage
-            const boulderFeeder = 1150 + rand(0, 100);
+
+            // Quarry Operations
+            const trips = 30 + rand(0, 20);
+            const boulderToday = 920 + rand(0, 100);
+            const boulderAdded = boulderToday;
+            const boulderStock = 12600 + rand(-300, 400);
+            const boulderFed = 1200 + rand(0, 120);  // New: Fed to plant (can be different)
+
             document.getElementById('trips').textContent = trips;
             document.getElementById('boulder-today').textContent = boulderToday + ' T';
-            document.getElementById('boulder-stock').textContent = boulderStock.toLocaleString() + ' T';
             document.getElementById('boulder-added').textContent = boulderAdded + ' T';
-            document.getElementById('boulder-feeder').textContent = boulderFeeder + ' T';
+            document.getElementById('boulder-stock').textContent = boulderStock.toLocaleString() + ' T';
+            document.getElementById('boulder-fed').textContent = boulderFed.toLocaleString() + ' T';
+
             // Production & Dispatch
             document.getElementById('p10').textContent = (270 + rand(0,40)) + ' T';
             document.getElementById('p20').textContent = (300 + rand(0,40)) + ' T';
@@ -260,6 +284,7 @@
             document.getElementById('ssand').textContent = (1600 + rand(-60,100)).toLocaleString() + ' T';
             document.getElementById('smsand').textContent = (950 + rand(-50,100)).toLocaleString() + ' T';
         }
+
         setInterval(update, 5000);
         update();
     </script>
