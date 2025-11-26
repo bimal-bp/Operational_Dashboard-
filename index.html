@@ -3,216 +3,586 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Operations Dashboard</title>
+    <title>Quarry Operations Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        html, body { height:100%; overflow:hidden; background:#1e1e2f; color:#fff; font-family:Arial, sans-serif; }
-
-        .title-bar {
-            background: #0d4d96;
-            padding: 10px 16px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-        .container {
-            height: calc(100% - 52px);
-            padding: 12px;
-            display: grid;
-            grid-template-rows: auto 1fr;
-            gap: 12px;
-        }
-
-        /* === BIGGER MACHINE BOXES === */
-        .machines {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-        }
-        .mach-box {
-            background: #2c3e50;
-            border-radius: 12px;
-            padding: 20px 10px;
-            text-align: center;
-            font-size: 1rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            height: 130px; /* 50% taller than before */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .mach-label { font-size: 0.95rem; opacity: 0.9; margin-bottom: 8px; }
-        .mach-value { font-size: 2.4rem; font-weight: bold; line-height: 1; }
-        .comp { border-top: 6px solid #e74c3c; }
-        .tipper { border-top: 6px solid #2ecc71; }
-        .exc { border-top: 6px solid #f39c12; }
-        .load { border-top: 6px solid #9b59b6; }
-
-        /* === MAIN CONTENT AREA === */
-        .main-area {
-            display: grid;
-            grid-template-columns: 1.2fr 2fr; /* Left narrower, right wider */
-            gap: 12px;
-            height: 100%;
-        }
-
-        /* Left: Quarry Flow (smaller & vertical) */
-        .quarry-flow {
-            background: linear-gradient(135deg, #1a6bc4, #0d4d96);
-            border-radius: 12px;
+        
+        body {
+            background-color: #f0f2f5;
+            color: #333;
             padding: 20px;
-            text-align: center;
-            font-size: 1.6rem;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .dashboard {
+            max-width: 1400px;
+            height: 100%;
+            margin: 0 auto;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #1a6bc4, #0d4d96);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .dashboard-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .stat-card h3 {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 10px;
+            display: flex;
             align-items: center;
         }
-        .flow-big { 
-            font-size: 4.8rem; 
-            font-weight: bold; 
-            margin: 12px 0;
-            line-height: 1;
+        
+        .stat-card h3 i {
+            margin-right: 8px;
         }
-        .arrow { 
-            font-size: 4rem; 
-            animation: pulse 2s infinite;
-            margin: 10px 0;
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
         }
-        @keyframes pulse { 0%,100% { opacity:0.6; } 50% { opacity:1; } }
-
-        /* Right Side: Production (top), Dispatch + Stock (bottom) */
-        .right-column {
-            display: grid;
-            grid-template-rows: 1fr 1fr;
-            gap: 12px;
+        
+        .compressor-card {
+            border-top: 4px solid #e74c3c;
         }
-
-        .section {
-            background: #2c3e50;
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        
+        .compressor-card h3 i {
+            color: #e74c3c;
         }
-        .section h2 {
-            font-size: 1.2rem;
-            margin-bottom: 12px;
-            text-align: center;
-            border-bottom: 1px solid #555;
-            padding-bottom: 8px;
+        
+        .compressor-card .stat-value {
+            color: #e74c3c;
         }
-
-        /* Production (full width on top right) */
-        #production {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+        
+        .tipper-card {
+            border-top: 4px solid #2ecc71;
         }
-
-        /* Dispatch + Stock side by side */
-        .bottom-row {
+        
+        .tipper-card h3 i {
+            color: #2ecc71;
+        }
+        
+        .tipper-card .stat-value {
+            color: #2ecc71;
+        }
+        
+        .excavator-card {
+            border-top: 4px solid #f39c12;
+        }
+        
+        .excavator-card h3 i {
+            color: #f39c12;
+        }
+        
+        .excavator-card .stat-value {
+            color: #f39c12;
+        }
+        
+        .loader-card {
+            border-top: 4px solid #9b59b6;
+        }
+        
+        .loader-card h3 i {
+            color: #9b59b6;
+        }
+        
+        .loader-card .stat-value {
+            color: #9b59b6;
+        }
+        
+        .operations-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 15px;
         }
-
-        .items {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        .item {
-            background: rgba(255,255,255,0.12);
-            padding: 14px 8px;
+        
+        .operations-panel {
+            background: white;
             border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+        
+        .operations-panel h2 {
+            color: #1a6bc4;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f2f5;
+            font-size: 1.3rem;
+        }
+        
+        .quarry-info, .plant-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f2f5;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        
+        .info-value {
+            font-weight: bold;
+            color: #1a6bc4;
+            font-size: 0.95rem;
+        }
+        
+        .flow-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+        
+        .flow-box {
+            background: white;
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
+            min-width: 180px;
         }
-        .item-label { font-size: 0.9rem; opacity: 0.9; }
-        .item-value { font-size: 1.6rem; font-weight: bold; margin-top: 6px; }
-
-        /* Responsive */
-        @media (max-width: 1400px) {
-            .main-area { grid-template-columns: 1fr; }
-            .quarry-flow { height: 180px; order: -1; }
-            .right-column { grid-template-rows: none; }
-            .bottom-row { grid-template-columns: 1fr; }
+        
+        .flow-box h3 {
+            color: #1a6bc4;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
         }
-        @media (max-width: 900px) {
-            .machines { grid-template-columns: 1fr 1fr; }
-            #production { grid-template-columns: 1fr 1fr; }
+        
+        .flow-box p {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #0d4d96;
+            margin-bottom: 5px;
+        }
+        
+        .product-unit {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .flow-arrow {
+            font-size: 2.2rem;
+            color: #1a6bc4;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .product-card h3 {
+            color: #1a6bc4;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .product-value {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #0d4d96;
+        }
+        
+        /* Dispatch Container with new colors */
+        .dispatch-container {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #e67e22;
+        }
+        
+        .dispatch-container h2 {
+            color: #e67e22;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f2f5;
+            font-size: 1.3rem;
+        }
+        
+        .dispatch-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        
+        .dispatch-stat {
+            text-align: center;
+            padding: 12px;
+            border-radius: 6px;
+            background: #fff9f2;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .dispatch-stat h4 {
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .dispatch-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e67e22;
+        }
+        
+        /* Stock Container with new colors */
+        .stock-container {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #16a085;
+        }
+        
+        .stock-container h2 {
+            color: #16a085;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f2f5;
+            font-size: 1.3rem;
+        }
+        
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        
+        .stock-item {
+            text-align: center;
+            padding: 12px;
+            border-radius: 6px;
+            background: #f2f9f8;
+            border-left: 4px solid #16a085;
+        }
+        
+        .stock-item h4 {
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .stock-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #16a085;
+        }
+        
+        @media (max-width: 1024px) {
+            .operations-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .flow-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .products-container, .dispatch-stats, .stock-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-container, .products-container, .dispatch-stats, .stock-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .dashboard-header p {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="title-bar">Live Operations Dashboard</div>
-
-    <div class="container">
-        <!-- Machine Availability - Bigger Boxes -->
-        <div class="machines">
-            <div class="mach-box comp">
-                <div class="mach-label">Compressors Running</div>
-                <div class="mach-value" id="comp">11</div>
-            </div>
-            <div class="mach-box tipper">
-                <div class="mach-label">Tippers Available</div>
-                <div class="mach-value" id="tipper">11/12</div>
-            </div>
-            <div class="mach-box exc">
-                <div class="mach-label">Excavators Running</div>
-                <div class="mach-value" id="exc">5/5</div>
-            </div>
-            <div class="mach-box load">
-                <div class="mach-label">Loaders Running</div>
-                <div class="mach-value" id="load">2/2</div>
-            </div>
+    <div class="dashboard">
+        <div class="dashboard-header">
+            <h1>Quarry Operations Dashboard</h1>
+            <p>Real-time monitoring of quarry operations and production</p>
         </div>
-
-        <!-- Main Content -->
-        <div class="main-area">
-            <!-- Left: Quarry Flow (reduced size) -->
-            <div class="section quarry-flow">
-                <div>Quarry Operations</div>
-                <div class="flow-big" id="quarry">970 T</div>
-                <div>Boulder Mined Today</div>
-                <div class="arrow">↓</div>
-                <div>To Plant</div>
-            </div>
-
-            <!-- Right Column -->
-            <div class="right-column">
-                <!-- Production (Top Right - Full Row) -->
-                <div class="section" id="production">
-                    <h2>Production Today</h2>
-                    <div class="item"><div class="item-label">10 mm</div><div class="item-value" id="p10">285 T</div></div>
-                    <div class="item"><div class="item-label">20 mm</div><div class="item-value" id="p20">312 T</div></div>
-                    <div class="item"><div class="item-label">River Sand</div><div class="item-value" id="psand">115 T</div></div>
-                    <div class="item"><div class="item-label">M Sand</div><div class="item-value" id="msand">140 T</div></div>
+        
+        <div class="dashboard-content">
+            <div class="stats-container">
+                <div class="stat-card compressor-card">
+                    <h3><i class="fas fa-compress-arrows-alt"></i> Compressors Running</h3>
+                    <div class="stat-value">12</div>
                 </div>
-
-                <!-- Bottom: Dispatch + Stock side by side -->
-                <div class="bottom-row">
-                    <div class="section">
-                        <h2>Dispatch Today</h2>
-                        <div class="items">
-                            <div class="item"><div class="item-label">10 mm</div><div class="item-value" id="d10">245 T</div></div>
-                            <div class="item"><div class="item-label">20 mm</div><div class="item-value" id="d20">280 T</div></div>
-                            <div class="item"><div class="item-label">River Sand</div><div class="item-value" id="dsand">95 T</div></div>
-                            <div class="item"><div class="item-label">M Sand</div><div class="item-value" id="dmsand">120 T</div></div>
-                        </div>
+                
+                <div class="stat-card tipper-card">
+                    <h3><i class="fas fa-truck-moving"></i> Tippers Available</h3>
+                    <div class="stat-value">9/12</div>
+                </div>
+                
+                <div class="stat-card excavator-card">
+                    <h3><i class="fas fa-digging"></i> Excavators Running</h3>
+                    <div class="stat-value">4/5</div>
+                </div>
+                
+                <div class="stat-card loader-card">
+                    <h3><i class="fas fa-tractor"></i> Loaders Running</h3>
+                    <div class="stat-value">2/2</div>
+                </div>
+            </div>
+            
+            <div class="operations-container">
+                <div class="operations-panel quarry-info">
+                    <h2>Quarry Operations</h2>
+                    <div class="info-item">
+                        <span class="info-label">Trips Today</span>
+                        <span class="info-value">35</span>
                     </div>
-
-                    <div class="section">
-                        <h2>Current Stock</h2>
-                        <div class="items">
-                            <div class="item"><div class="item-label">10 mm</div><div class="item-value" id="s10">2,150 T</div></div>
-                            <div class="item"><div class="item-label">20 mm</div><div class="item-value" id="s20">3,420 T</div></div>
-                            <div class="item"><div class="item-label">River Sand</div><div class="item-value" id="ssand">1,650 T</div></div>
-                            <div class="itemON SALE<div class="item"><div class="item-label">M Sand</div><div class="item-value" id="smsand">980 T</div></div>
-                        </div>
+                    <div class="info-item">
+                        <span class="info-label">Boulder Tonnage</span>
+                        <span class="info-value">956 T</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Daily Target</span>
+                        <span class="info-value">3,000 T</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Achievement</span>
+                        <span class="info-value">31.9%</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Boulder Stock at Plant</span>
+                        <span class="info-value">12,565 T</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Boulder Added To Stock</span>
+                        <span class="info-value">956 T</span>
+                    </div>
+                </div>
+                
+                <div class="operations-panel plant-info">
+                    <h2>Plant Operations</h2>
+                    <div class="info-item">
+                        <span class="info-label">Plant Uptime</span>
+                        <span class="info-value">92.5%</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Boulder Consumed</span>
+                        <span class="info-value">852 T</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Production Rate</span>
+                        <span class="info-value">85.2 T/hr</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Quality Compliance</span>
+                        <span class="info-value">98.7%</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Maintenance Status</span>
+                        <span class="info-value">Optimal</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Power Consumption</span>
+                        <span class="info-value">1,250 kWh</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-container">
+                <div class="flow-box">
+                    <h3>Quarry</h3>
+                    <p>980 T</p>
+                    <div class="product-unit">Boulder Mined Today</div>
+                </div>
+                
+                <div class="flow-arrow">
+                    <i class="fas fa-long-arrow-alt-right"></i>
+                </div>
+                
+                <div class="flow-box">
+                    <h3>To Plant</h3>
+                    <p>980 T</p>
+                    <div class="product-unit">Boulder Transported</div>
+                </div>
+            </div>
+            
+            <div class="products-container">
+                <div class="product-card">
+                    <h3>10 mm Aggregate</h3>
+                    <div class="product-value">285 T</div>
+                    <div class="product-unit">Produced Today</div>
+                </div>
+                
+                <div class="product-card">
+                    <h3>20 mm Aggregate</h3>
+                    <div class="product-value">312 T</div>
+                    <div class="product-unit">Produced Today</div>
+                </div>
+                
+                <div class="product-card">
+                    <h3>River Sand</h3>
+                    <div class="product-value">115 T</div>
+                    <div class="product-unit">Produced Today</div>
+                </div>
+                
+                <div class="product-card">
+                    <h3>M Sand</h3>
+                    <div class="product-value">140 T</div>
+                    <div class="product-unit">Produced Today</div>
+                </div>
+            </div>
+            
+            <div class="dispatch-container">
+                <h2>Dispatch Information</h2>
+                <div class="dispatch-stats">
+                    <div class="dispatch-stat">
+                        <h4>10 mm Aggregate</h4>
+                        <div class="dispatch-value">245 T</div>
+                    </div>
+                    
+                    <div class="dispatch-stat">
+                        <h4>20 mm Aggregate</h4>
+                        <div class="dispatch-value">280 T</div>
+                    </div>
+                    
+                    <div class="dispatch-stat">
+                        <h4>River Sand</h4>
+                        <div class="dispatch-value">95 T</div>
+                    </div>
+                    
+                    <div class="dispatch-stat">
+                        <h4>M Sand</h4>
+                        <div class="dispatch-value">120 T</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stock-container">
+                <h2>Stock at Plant</h2>
+                <div class="stock-grid">
+                    <div class="stock-item">
+                        <h4>10 mm Aggregate</h4>
+                        <div class="stock-value">2,150 T</div>
+                    </div>
+                    
+                    <div class="stock-item">
+                        <h4>20 mm Aggregate</h4>
+                        <div class="stock-value">3,420 T</div>
+                    </div>
+                    
+                    <div class="stock-item">
+                        <h4>River Sand</h4>
+                        <div class="stock-value">1,650 T</div>
+                    </div>
+                    
+                    <div class="stock-item">
+                        <h4>M Sand</h4>
+                        <div class="stock-value">980 T</div>
+                    </div>
+                    
+                    <div class="stock-item">
+                        <h4>Boulder Stock</h4>
+                        <div class="stock-value">12,565 T</div>
                     </div>
                 </div>
             </div>
@@ -220,33 +590,60 @@
     </div>
 
     <script>
-        function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-        function update() {
-            document.getElementById('comp').textContent = 10 + rand(0,3);
-            document.getElementById('tipper').textContent = `${8+rand(0,4)}/12`;
-            document.getElementById('exc').textContent = `${4+rand(0,1)}/5`;
-            document.getElementById('load').textContent = `2/2`;
-
-            const mined = 950 + rand(0,80);
-            document.getElementById('quarry').textContent = mined + ' T';
-
-            document.getElementById('p10').textContent = (270 + rand(0,40)) + ' T';
-            document.getElementById('p20').textContent = (300 + rand(0,40)) + ' T';
-            document.getElementById('psand').textContent = (100 + rand(0,30)) + ' T';
-            document.getElementById('msand').textContent = (130 + rand(0,30)) + ' T';
-
-            document.getElementById('d10').textContent = (230 + rand(0,30)) + ' T';
-            document.getElementById('d20').textContent = (260 + rand(0,40)) + ' T';
-            document.getElementById('dsand').textContent = (85 + rand(0,20)) + ' T';
-            document.getElementById('dmsand').textContent = (110 + rand(0,25)) + ' T';
-
-            document.getElementById('s10').textContent = (2100 + rand(-50,100)).toLocaleString() + ' T';
-            document.getElementById('s20').textContent = (3350 + rand(-80,150)).toLocaleString() + ' T';
-            document.getElementById('ssand').textContent = (1600 + rand(-60,100)).toLocaleString() + ' T';
-            document.getElementById('smsand').textContent = (950 + rand(-50,100)).toLocaleString() + ' T';
+        // Function to update values with random fluctuations (for demo purposes)
+        function updateValues() {
+            // Equipment stats
+            document.querySelectorAll('.stat-value')[0].textContent = `${11 + Math.floor(Math.random() * 3)}`;
+            document.querySelectorAll('.stat-value')[1].textContent = `${8 + Math.floor(Math.random() * 3)}`;
+            document.querySelectorAll('.stat-value')[2].textContent = `${12 + Math.floor(Math.random() * 3)}`;
+            document.querySelectorAll('.stat-value')[3].textContent = `${7 + Math.floor(Math.random() * 3)}`;
+            
+            // Quarry operations
+            const trips = 35 + Math.floor(Math.random() * 3);
+            document.querySelectorAll('.info-value')[0].textContent = trips;
+            
+            const boulderTonnage = 956 + Math.floor(Math.random() * 25);
+            document.querySelectorAll('.info-value')[1].textContent = `${boulderTonnage} T`;
+            
+            const achievement = (boulderTonnage / 3000 * 100).toFixed(1);
+            document.querySelectorAll('.info-value')[3].textContent = `${achievement}%`;
+            
+            // Plant operations
+            const boulderStock = 12565 + boulderTonnage - 852;
+            document.querySelectorAll('.info-value')[4].textContent = `${boulderStock.toLocaleString()} T`;
+            
+            document.querySelectorAll('.info-value')[5].textContent = `${boulderTonnage} T`;
+            
+            // Flow boxes
+            const flowBoulder = 980 + Math.floor(Math.random() * 20) - 10;
+            document.querySelectorAll('.flow-box p')[0].textContent = `${flowBoulder} T`;
+            document.querySelectorAll('.flow-box p')[1].textContent = `${flowBoulder} T`;
+            
+            // Products
+            const products = document.querySelectorAll('.product-value');
+            products[0].textContent = `${285 + Math.floor(Math.random() * 15) - 7} T`;
+            products[1].textContent = `${312 + Math.floor(Math.random() * 15) - 7} T`;
+            products[2].textContent = `${115 + Math.floor(Math.random() * 10) - 5} T`;
+            products[3].textContent = `${140 + Math.floor(Math.random() * 10) - 5} T`;
+            
+            // Dispatch
+            const dispatch = document.querySelectorAll('.dispatch-value');
+            dispatch[0].textContent = `${245 + Math.floor(Math.random() * 10) - 5} T`;
+            dispatch[1].textContent = `${280 + Math.floor(Math.random() * 10) - 5} T`;
+            dispatch[2].textContent = `${95 + Math.floor(Math.random() * 5) - 2} T`;
+            dispatch[3].textContent = `${120 + Math.floor(Math.random() * 5) - 2} T`;
+            
+            // Stock at plant
+            const stock = document.querySelectorAll('.stock-value');
+            stock[0].textContent = `${2150 + Math.floor(Math.random() * 50) - 25} T`;
+            stock[1].textContent = `${3420 + Math.floor(Math.random() * 50) - 25} T`;
+            stock[2].textContent = `${1650 + Math.floor(Math.random() * 30) - 15} T`;
+            stock[3].textContent = `${980 + Math.floor(Math.random() * 30) - 15} T`;
+            stock[4].textContent = `${boulderStock.toLocaleString()} T`;
         }
-        setInterval(update, 5000);
-        update();
+        
+        // Update values every 5 seconds
+        setInterval(updateValues, 5000);
     </script>
 </body>
 </html>
