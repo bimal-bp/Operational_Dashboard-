@@ -19,6 +19,8 @@
             --purple: #8b5cf6;
             --danger: #ef4444;
             --orange: #f97316;
+            --boulder: #7c3aed;
+            --prod: #ea580c;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
@@ -47,8 +49,6 @@
             gap: 18px;
             overflow: hidden;
         }
-
-        /* === SIMPLE RECTANGLE STYLE FOR ALL CARDS === */
         .card {
             background: var(--card);
             border: 2px solid var(--border);
@@ -61,19 +61,22 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.06);
             transform: translateY(-2px);
         }
-
         /* Machines */
-        .machines { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+        .machines { 
+            display: grid; 
+            grid-template-columns: repeat(4,1fr); 
+            gap: 16px; 
+        }
         .mach-box {
             border-top: 6px solid;
             text-align: center;
+            padding: 16px 8px;
         }
         .comp { border-top-color: var(--danger); }
         .tipper { border-top-color: var(--success); }
         .exc { border-top-color: var(--warning); }
         .load { border-top-color: var(--purple); }
-
-        .mach-icon { font-size: 2.4rem; margin-bottom: 12px; opacity: 0.9; }
+        .mach-icon { font-size: 2.4rem; margin-bottom: 10px; opacity: 0.9; }
         .mach-label { font-size: 0.95rem; color: var(--text-light); font-weight: 600; }
         .mach-value { font-size: 2.3rem; font-weight: 700; margin-top: 6px; }
 
@@ -86,12 +89,11 @@
         }
         .left-stack, .right-stack {
             display: grid;
-            grid-template-rows: auto 1fr;
+            grid-template-rows: auto auto 1fr;
             gap: 18px;
         }
         .right-stack { grid-template-rows: 1fr 1fr; }
 
-        /* Section Titles */
         h2 {
             font-size: 1.5rem;
             font-weight: 600;
@@ -99,55 +101,56 @@
             text-align: center;
             color: var(--text);
         }
-        .quarry-compact h2 { color: #7c3aed; }
-        .production h2 { color: #ea580c; }
+        .boulder-ops h2 { color: var(--boulder); }
+        .production h2 { color: var(--prod); }
 
-        /* Quarry Compact */
-        .q-row {
+        /* Boulder Operations - 3 Big Boxes */
+        .boulder-row {
             display: grid;
             grid-template-columns: repeat(3,1fr);
-            gap: 14px;
+            gap: 16px;
         }
-        .q-small {
-            padding: 18px 12px;
+        .boulder-item {
+            padding: 20px 12px;
             text-align: center;
             border: 2px solid var(--border);
             border-radius: 10px;
             transition: all 0.25s ease;
         }
-        .q-small:hover { border-color: #94a3b8; }
-        .q-small i { font-size: 2rem; margin-bottom: 8px; opacity: 0.85; }
+        .boulder-item:hover { border-color: #94a3b8; }
+        .boulder-item i { font-size: 2.2rem; margin-bottom: 10px; opacity: 0.85; }
         .trips i { color: var(--primary); }
         .tonnage i { color: var(--orange); }
         .feeder i { color: var(--danger); }
-        .q-small .label { font-size: 0.9rem; color: var(--text-light); font-weight: 600; }
-        .q-small .value { font-size: 1.9rem; font-weight: 800; margin-top: 4px; }
+        .boulder-item .label { font-size: 0.95rem; color: var(--text-light); font-weight: 600; }
+        .boulder-item .value { font-size: 2.1rem; font-weight: 800; margin-top: 6px; }
 
-        /* Grid Items (Production / Dispatch / Stock) */
+        /* Production - Unified Card */
         .grid-4 {
             display: grid;
             grid-template-columns: repeat(4,1fr);
-            gap: 12px;
+            gap: 14px;
         }
         .item {
-            padding: 16px 10px;
+            padding: 18px 10px;
             text-align: center;
             border: 2px solid var(--border);
             border-radius: 10px;
             transition: all 0.25s ease;
         }
         .item:hover { border-color: #94a3b8; }
-        .item-label { font-size: 0.9rem; color: var(--text-light); }
-        .item-value { font-size: 1.7rem; font-weight: 700; margin-top: 6px; }
+        .item-label { font-size: 0.92rem; color: var(--text-light); font-weight: 600; }
+        .item-value { font-size: 1.8rem; font-weight: 700; margin-top: 8px; }
 
         /* Responsive */
         @media (max-width: 1400px) {
             .main-area { grid-template-columns: 1fr; }
-            .q-row { grid-template-columns: repeat(2,1fr); }
         }
         @media (max-width: 900px) {
-            .machines, .grid-4 { grid-template-columns: repeat(2,1fr); }
-            .q-row { grid-template-columns: 1fr; }
+            .machines, .grid-4, .boulder-row { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 600px) {
+            .machines, .grid-4, .boulder-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -155,7 +158,6 @@
     <div class="title-bar">
         <i class="fas fa-tachometer-alt"></i> Live Operations Dashboard
     </div>
-
     <div class="container">
         <!-- Machines -->
         <div class="machines">
@@ -185,41 +187,45 @@
         <div class="main-area">
             <!-- Left Column -->
             <div class="left-stack">
-                <div class="card quarry-compact">
-                    <h2><i class="fas fa-mountain"></i> Quarry Operations</h2>
-                    <div class="q-row">
-                        <div class="q-small trips">
+                <!-- Boulder Operations -->
+                <div class="card boulder-ops">
+                    <h2><i class="fas fa-mountain"></i> Boulder Operations</h2>
+                    <div class="boulder-row">
+                        <div class="boulder-item trips">
                             <i class="fas fa-exchange-alt"></i>
                             <div class="label">Trips Today</div>
-                            <div class="value" id="trips">36</div>
+                            <div class="value" id="trips">34</div>
                         </div>
-                        <div class="q-small tonnage">
+                        <div class="boulder-item tonnage">
                             <i class="fas fa-weight-hanging"></i>
                             <div class="label">Boulder Tonnage</div>
-                            <div class="value" id="boulder-today">963</div>
+                            <div class="value" id="boulder-today">1,020</div>
                         </div>
-                        <div class="q-small feeder">
+                        <div class="boulder-item feeder">
                             <i class="fas fa-conveyor-belt"></i>
                             <div class="label">Feeder to Plant</div>
-                            <div class="value" id="boulder-feeder">1,200</div>
+                            <div class="value" id="boulder-feeder">1,181</div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Production Today (Unified) -->
                 <div class="card production">
                     <h2><i class="fas fa-cogs"></i> Production Today</h2>
                     <div class="grid-4">
-                        <div class="item"><div class="item-label">10 mm</div><div class="item-value" id="p10">285</div></div>
-                        <div class="item"><div class="item-label">20 mm</div><div class="item-value" id="p20">312</div></div>
-                        <div class="item"><div class="item-label">River Sand</div><div class="item-value" id="psand">115</div></div>
-                        <div class="item"><div class="item-label">M Sand</div><div class="item-value" id="msand">140</div></div>
+                        <div class="item"><div class="item-label">10 mm</div><div class="item-value" id="p10">294</div></div>
+                        <div class="item"><div class="item-label">20 mm</div><div class="item-value" id="p20">330</div></div>
+                        <div class="item"><div class="item-label">River Sand</div><div class="item-value" id="psand">120</div></div>
+                        <div class="item"><div class="item-label">M Sand</div><div class="item-value" id="msand">150</div></div>
                     </div>
                 </div>
+
+                <!-- You can add more cards here if needed -->
             </div>
 
             <!-- Right Column -->
             <div class="right-stack">
-                <div class="card section">
+                <div class="card">
                     <h2><i class="fas fa-truck-moving"></i> Dispatch Today</h2>
                     <div class="grid-4">
                         <div class="item"><div class="item-label">10 mm</div><div class="item-value" id="d10">245</div></div>
@@ -228,8 +234,7 @@
                         <div class="item"><div class="item-label">M Sand</div><div class="item-value" id="dmsand">120</div></div>
                     </div>
                 </div>
-
-                <div class="card section">
+                <div class="card">
                     <h2><i class="fas fa-warehouse"></i> Current Stock</h2>
                     <div class="grid-4">
                         <div class="item"><div class="item-label">10 mm</div><div class="item-value" id="s10">2,150</div></div>
@@ -244,24 +249,26 @@
 
     <script>
         function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        
         function update() {
+            // Machines
             document.getElementById('comp').textContent = 10 + rand(0,3);
             document.getElementById('tipper').textContent = `${8+rand(0,4)}/12`;
             document.getElementById('exc').textContent = `${4+rand(0,1)}/5`;
             document.getElementById('load').textContent = `2/2`;
 
-            const trips = 30 + rand(0, 20);
-            const boulderToday = 920 + rand(0, 100);
-            const boulderFeeder = 1150 + rand(0, 120);
-            document.getElementById('trips').textContent = trips;
-            document.getElementById('boulder-today').textContent = boulderToday;
-            document.getElementById('boulder-feeder').textContent = boulderFeeder.toLocaleString();
+            // Boulder Operations
+            document.getElementById('trips').textContent = 25 + rand(0, 25);  // varies around 34
+            document.getElementById('boulder-today').textContent = 950 + rand(0, 120);
+            document.getElementById('boulder-feeder').textContent = (1150 + rand(0, 100)).toLocaleString();
 
-            document.getElementById('p10').textContent = 270 + rand(0,50);
-            document.getElementById('p20').textContent = 300 + rand(0,50);
-            document.getElementById('psand').textContent = 100 + rand(0,40);
-            document.getElementById('msand').textContent = 130 + rand(0,40);
+            // Production Today
+            document.getElementById('p10').textContent = 270 + rand(0, 50);
+            document.getElementById('p20').textContent = 310 + rand(0, 50);
+            document.getElementById('psand').textContent = 100 + rand(0, 40);
+            document.getElementById('msand').textContent = 130 + rand(0, 40);
 
+            // Dispatch & Stock (still random for demo)
             document.getElementById('d10').textContent = 230 + rand(0,40);
             document.getElementById('d20').textContent = 260 + rand(0,50);
             document.getElementById('dsand').textContent = 85 + rand(0,30);
@@ -272,6 +279,7 @@
             document.getElementById('ssand').textContent = (1600 + rand(-80,150)).toLocaleString();
             document.getElementById('smsand').textContent = (950 + rand(-70,150)).toLocaleString();
         }
+
         setInterval(update, 5000);
         update();
     </script>
