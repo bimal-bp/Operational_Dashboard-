@@ -14,16 +14,12 @@
             --text-light: #64748b;
             --border: #e2e8f0;
             --shadow: 0 8px 25px rgba(0,0,0,0.08);
-            --shadow-hover: 0 12px 30px rgba(0,0,0,0.12);
             --primary: #3b82f6;
             --success: #10b981;
             --warning: #f59e0b;
             --purple: #8b5cf6;
             --danger: #ef4444;
             --orange: #f97316;
-            --cyan: #06b6d4;
-            --pink: #ec4899;
-            --indigo: #6366f1;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
@@ -42,17 +38,6 @@
             font-weight: 700;
             text-align: center;
             box-shadow: 0 4px 20px rgba(59,130,246,0.5);
-            position: relative;
-            overflow: hidden;
-        }
-        .title-bar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444, #8b5cf6);
         }
         .title-bar i { margin-right: 10px; }
         .container {
@@ -76,76 +61,66 @@
             text-align: center;
             box-shadow: var(--shadow);
             transition: all 0.3s ease;
-            border-left: 5px solid;
-            position: relative;
-            overflow: hidden;
+            border-top: 5px solid;
         }
-        .mach-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: inherit;
-        }
-        .mach-box:hover { 
-            transform: translateY(-6px); 
-            box-shadow: var(--shadow-hover);
-        }
-        .comp { border-color: var(--danger); }
-        .comp::before { background: var(--danger); }
-        .tipper { border-color: var(--success); }
-        .tipper::before { background: var(--success); }
-        .exc { border-color: var(--warning); }
-        .exc::before { background: var(--warning); }
-        .load { border-color: var(--purple); }
-        .load::before { background: var(--purple); }
+        .mach-box:hover { transform: translateY(-6px); }
+        .comp { border-color: #ef4444; }
+        .tipper { border-color: #10b981; }
+        .exc { border-color: #f59e0b; }
+        .load { border-color: #8b5cf6; }
         .mach-icon { font-size: 2.2rem; margin-bottom: 10px; }
         .mach-label { font-size: 0.95rem; color: var(--text-light); font-weight: 500; }
         .mach-value { font-size: 2.2rem; font-weight: 700; margin-top: 6px; }
-        /* Main Area - Compact Layout */
+
+        /* Main Area */
         .main-area {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 18px;
             height: 100%;
         }
-        /* Left: Quarry + Production (stacked) */
         .left-stack {
             display: grid;
             grid-template-rows: auto 1fr;
             gap: 18px;
         }
-        /* Compact Quarry Cards (3 small ones) */
+
+        /* Section Titles with Unique Colors */
+        .quarry-compact h2 {
+            font-size: 1.5rem;
+            background: linear-gradient(90deg, #7c3aed, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .production h2 {
+            font-size: 1.4rem;
+            color: #ea580c; /* Orange-red for Production */
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .section h2:nth-of-type(1) { /* Dispatch */
+            color: #dc2626; /* Bright red */
+            text-align: center;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #fca5a5;
+        }
+        .section h2:nth-of-type(2) { /* Stock */
+            color: #059669; /* Emerald green */
+            text-align: center;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #86efac;
+        }
+
+        /* Quarry Compact */
         .quarry-compact {
             background: var(--card);
             border-radius: 16px;
             padding: 20px;
             box-shadow: var(--shadow);
-            text-align: center;
-            border-left: 5px solid var(--cyan);
-            position: relative;
-        }
-        .quarry-compact::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--cyan);
-        }
-        .quarry-compact h2 {
-            font-size: 1.5rem;
-            background: linear-gradient(90deg, #1e40af, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
         }
         .q-row {
             display: grid;
@@ -157,51 +132,21 @@
             background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240,249,255,0.7));
             border-radius: 14px;
             box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-            border-top: 4px solid;
-            transition: all 0.3s ease;
+            text-align: center;
         }
-        .q-small:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-        }
-        .trips { border-color: var(--primary); }
-        .tonnage { border-color: var(--orange); }
-        .feeder { border-color: var(--danger); }
         .q-small i { font-size: 2rem; margin-bottom: 8px; }
-        .trips i { color: var(--primary); }
-        .tonnage i { color: var(--orange); }
-        .feeder i { color: var(--danger); }
+        .trips i { color: #3b82f6; }
+        .tonnage i { color: #f97316; }
+        .feeder i { color: #dc2626; }
         .q-small .label { font-size: 0.9rem; color: var(--text-light); font-weight: 600; }
         .q-small .value { font-size: 1.8rem; font-weight: 800; margin-top: 4px; }
-        /* Production */
-        .production {
+
+        /* Production, Dispatch, Stock */
+        .production, .section {
             background: var(--card);
             border-radius: 16px;
             padding: 20px;
             box-shadow: var(--shadow);
-            border-left: 5px solid var(--pink);
-            position: relative;
-        }
-        .production::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--pink);
-        }
-        .production h2 {
-            font-size: 1.4rem;
-            text-align: center;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: linear-gradient(90deg, #ec4899, #f97316);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
         .grid-4 {
             display: grid;
@@ -214,67 +159,17 @@
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-            border-top: 3px solid;
-            transition: all 0.3s ease;
         }
-        .item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-        }
-        .item:nth-child(1) { border-color: var(--primary); }
-        .item:nth-child(2) { border-color: var(--warning); }
-        .item:nth-child(3) { border-color: var(--success); }
-        .item:nth-child(4) { border-color: var(--purple); }
         .item-label { font-size: 0.9rem; color: var(--text-light); }
         .item-value { font-size: 1.6rem; font-weight: 700; margin-top: 6px; }
-        /* Right: Dispatch + Stock (side by side) */
+
         .right-stack {
             display: grid;
             grid-template-rows: 1fr 1fr;
             gap: 18px;
         }
-        .section {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            border-left: 5px solid;
-            position: relative;
-        }
-        .section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-        }
-        .section:nth-child(1) { border-color: var(--indigo); }
-        .section:nth-child(1)::before { background: var(--indigo); }
-        .section:nth-child(2) { border-color: var(--cyan); }
-        .section:nth-child(2)::before { background: var(--cyan); }
-        .section h2 {
-            font-size: 1.4rem;
-            text-align: center;
-            margin-bottom: 16px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .section:nth-child(1) h2 {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .section:nth-child(2) h2 {
-            background: linear-gradient(90deg, #06b6d4, #10b981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        /* Responsive fallback */
+
+        /* Responsive */
         @media (max-width: 1400px) {
             .main-area { grid-template-columns: 1fr; }
             .q-row { grid-template-columns: 1fr 1fr; }
@@ -313,11 +208,12 @@
                 <div class="mach-value" id="load">2/2</div>
             </div>
         </div>
-        <!-- Main Content - Compact -->
+
+        <!-- Main Content -->
         <div class="main-area">
             <!-- Left Column -->
             <div class="left-stack">
-                <!-- Compact Quarry Metrics -->
+                <!-- Quarry Operations -->
                 <div class="quarry-compact">
                     <h2><i class="fas fa-mountain"></i> Quarry Operations</h2>
                     <div class="q-row">
@@ -338,6 +234,7 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- Production -->
                 <div class="production">
                     <h2><i class="fas fa-cogs"></i> Production Today</h2>
@@ -349,6 +246,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- Right Column -->
             <div class="right-stack">
                 <!-- Dispatch -->
@@ -361,6 +259,7 @@
                         <div class="item"><div class="item-label">M Sand</div><div class="item-value" id="dmsand">120</div></div>
                     </div>
                 </div>
+
                 <!-- Stock -->
                 <div class="section">
                     <h2><i class="fas fa-warehouse"></i> Current Stock</h2>
@@ -374,6 +273,7 @@
             </div>
         </div>
     </div>
+
     <script>
         function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
         function update() {
@@ -381,23 +281,27 @@
             document.getElementById('tipper').textContent = `${8+rand(0,4)}/12`;
             document.getElementById('exc').textContent = `${4+rand(0,1)}/5`;
             document.getElementById('load').textContent = `2/2`;
+
             const trips = 30 + rand(0, 20);
             const boulderToday = 920 + rand(0, 100);
             const boulderFeeder = 1150 + rand(0, 120);
             document.getElementById('trips').textContent = trips;
             document.getElementById('boulder-today').textContent = boulderToday;
             document.getElementById('boulder-feeder').textContent = boulderFeeder;
-            // Production
-            document.getElementById('p10').textContent = (270 + rand(0,50));
-            document.getElementById('p20').textContent = (300 + rand(0,50));
-            document.getElementById('psand').textContent = (100 + rand(0,40));
-            document.getElementById('msand').textContent = (130 + rand(0,40));
+
+            // Production (no "T")
+            document.getElementById('p10').textContent = 270 + rand(0,50);
+            document.getElementById('p20').textContent = 300 + rand(0,50);
+            document.getElementById('psand').textContent = 100 + rand(0,40);
+            document.getElementById('msand').textContent = 130 + rand(0,40);
+
             // Dispatch
-            document.getElementById('d10').textContent = (230 + rand(0,40));
-            document.getElementById('d20').textContent = (260 + rand(0,50));
-            document.getElementById('dsand').textContent = (85 + rand(0,30));
-            document.getElementById('dmsand').textContent = (110 + rand(0,35));
-            // Stock
+            document.getElementById('d10').textContent = 230 + rand(0,40);
+            document.getElementById('d20').textContent = 260 + rand(0,50);
+            document.getElementById('dsand').textContent = 85 + rand(0,30);
+            document.getElementById('dmsand').textContent = 110 + rand(0,35);
+
+            // Stock (with thousand separators)
             document.getElementById('s10').textContent = (2100 + rand(-80,150)).toLocaleString();
             document.getElementById('s20').textContent = (3350 + rand(-100,200)).toLocaleString();
             document.getElementById('ssand').textContent = (1600 + rand(-80,150)).toLocaleString();
