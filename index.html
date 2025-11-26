@@ -4,313 +4,494 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Operations Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 8px 25px rgba(0,0,0,0.08);
-            --primary: #3b82f6;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --purple: #8b5cf6;
-            --danger: #ef4444;
-            --orange: #f97316;
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
         }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body {
-            height: 100vh;
-            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            flex-direction: column;
+        
+        html, body { 
+            height: 100%; 
+            overflow: hidden; 
+            background: #f8fafc; 
+            color: #2d3748; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
         }
+        
         .title-bar {
-            background: linear-gradient(90deg, #1e40af, #3b82f6);
-            color: white;
-            padding: 16px 24px;
-            font-size: 1.7rem;
-            font-weight: 700;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 16px;
+            font-size: 1.5rem;
+            font-weight: 600;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(59,130,246,0.5);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }
-        .title-bar i { margin-right: 10px; }
-
+        
         .container {
-            flex: 1;
+            height: calc(100% - 68px);
             padding: 20px;
             display: grid;
-            grid-template-rows: auto 1fr;
-            gap: 18px;
-            overflow: hidden;
+            grid-template-rows: 30% 1fr;
+            gap: 20px;
         }
-
-        /* Top Row - Machines */
+        
+        /* === MACHINE BOXES === */
         .machines {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
+            gap: 20px;
         }
+        
         .mach-box {
-            background: var(--card);
+            background: white;
             border-radius: 16px;
-            padding: 18px;
+            padding: 16px;
             text-align: center;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            border-top: 5px solid;
+            font-size: 1rem;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .mach-box:hover { transform: translateY(-6px); }
-        .comp { border-color: #ef4444; }
-        .tipper { border-color: #10b981; }
-        .exc { border-color: #f59e0b; }
-        .load { border-color: #8b5cf6; }
-        .mach-icon { font-size: 2.2rem; margin-bottom: 10px; }
-        .mach-label { font-size: 0.95rem; color: var(--text-light); font-weight: 500; }
-        .mach-value { font-size: 2.2rem; font-weight: 700; margin-top: 6px; }
-
-        /* Main Area - Compact Layout */
+        
+        .mach-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+        }
+        
+        .mach-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        }
+        
+        .mach-label { 
+            font-size: 1rem; 
+            opacity: 0.8; 
+            margin-bottom: 8px; 
+            font-weight: 500;
+        }
+        
+        .mach-value { 
+            font-size: 2.2rem; 
+            font-weight: 700; 
+            line-height: 1; 
+        }
+        
+        .comp::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+        .tipper::before { background: linear-gradient(90deg, #10b981, #34d399); }
+        .exc::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .load::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+        
+        /* === MAIN CONTENT AREA === */
         .main-area {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 18px;
+            gap: 20px;
             height: 100%;
         }
-
-        /* Left: Quarry + Production (stacked) */
-        .left-stack {
-            display: grid;
-            grid-template-rows: auto 1fr;
-            gap: 18px;
-        }
-
-        /* Compact Quarry Cards (3 small ones) */
-        .quarry-compact {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            text-align: center;
-        }
-        .quarry-compact h2 {
-            font-size: 1.5rem;
-            background: linear-gradient(90deg, #1e40af, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 16px;
-        }
-        .q-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-        }
-        .q-small {
-            padding: 16px 12px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240,249,255,0.7));
-            border-radius: 14px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-        }
-        .q-small i { font-size: 2rem; margin-bottom: 8px; }
-        .trips i { color: #3b82f6; }
-        .tonnage i { color: #f97316; }
-        .feeder i { color: #dc2626; }
-        .q-small .label { font-size: 0.9rem; color: var(--text-light); font-weight: 600; }
-        .q-small .value { font-size: 1.8rem; font-weight: 800; margin-top: 4px; }
-
-        /* Production */
-        .production {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-        }
-        .production h2 {
-            font-size: 1.4rem;
-            text-align: center;
-            margin-bottom: 16px;
-            color: var(--text);
-        }
-        .grid-4 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
-        .item {
-            background: #f8fafc;
-            padding: 14px 10px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-        }
-        .item-label { font-size: 0.9rem; color: var(--text-light); }
-        .item-value { font-size: 1.6rem; font-weight: 700; margin-top: 6px; }
-
-        /* Right: Dispatch + Stock (side by side) */
-        .right-stack {
+        
+        /* === LEFT COLUMN === */
+        .left-column {
             display: grid;
             grid-template-rows: 1fr 1fr;
-            gap: 18px;
+            gap: 20px;
         }
-        .section {
-            background: var(--card);
-            border-radius: 16px;
+        
+        /* === QUARRY OPERATIONS CARD === */
+        .quarry-card {
+            background: white;
+            color: #2d3748;
+            border-radius: 18px;
             padding: 20px;
-            box-shadow: var(--shadow);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border: 2px solid #e2e8f0;
         }
-        .section h2 {
-            font-size: 1.4rem;
+        
+        .quarry-card h2 {
+            color: #1e40af;
+            font-size: 1.5rem;
             text-align: center;
-            margin-bottom: 16px;
+            font-weight: 700;
             padding-bottom: 8px;
-            border-bottom: 2px solid var(--border);
+            border-bottom: 2px solid #e2e8f0;
         }
-
-        /* Responsive fallback */
+        
+        .quarry-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            height: 100%;
+        }
+        
+        .q-button {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            border-left: 6px solid;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .q-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        .q-button.trips { border-left-color: #3b82f6; }
+        .q-button.tonnage { border-left-color: #f59e0b; }
+        .q-button.feeder { border-left-color: #ef4444; }
+        
+        .q-label { 
+            font-size: 0.9rem; 
+            opacity: 0.8; 
+            margin-bottom: 8px; 
+            font-weight: 500;
+        }
+        
+        .q-value { 
+            font-size: 1.6rem; 
+            font-weight: 700; 
+            color: #1e293b;
+        }
+        
+        /* === PRODUCTION TODAY === */
+        .production-card {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .production-card h2 {
+            color: #1e40af;
+            font-size: 1.5rem;
+            text-align: center;
+            font-weight: 700;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .production-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 12px;
+            height: 100%;
+        }
+        
+        .p-item {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            border-top: 6px solid;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .p-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        .p-item:nth-child(1) { border-top-color: #3b82f6; }
+        .p-item:nth-child(2) { border-top-color: #10b981; }
+        .p-item:nth-child(3) { border-top-color: #f59e0b; }
+        .p-item:nth-child(4) { border-top-color: #8b5cf6; }
+        
+        .p-label { 
+            font-size: 0.9rem; 
+            opacity: 0.8; 
+            margin-bottom: 8px; 
+            font-weight: 500;
+        }
+        
+        .p-value { 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+            color: #1e293b;
+        }
+        
+        /* === RIGHT COLUMN === */
+        .right-column {
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            text-align: center;
+            font-weight: 700;
+            color: #1e40af;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .dispatch-grid, .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 12px;
+            height: 100%;
+        }
+        
+        .d-item, .s-item {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 14px;
+            text-align: center;
+            border-top: 6px solid;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .d-item:hover, .s-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        /* Dispatch items with different colors */
+        .d-item:nth-child(1) { border-top-color: #3b82f6; }
+        .d-item:nth-child(2) { border-top-color: #10b981; }
+        .d-item:nth-child(3) { border-top-color: #f59e0b; }
+        .d-item:nth-child(4) { border-top-color: #8b5cf6; }
+        
+        /* Stock items with different colors */
+        .s-item:nth-child(1) { border-top-color: #ec4899; }
+        .s-item:nth-child(2) { border-top-color: #06b6d4; }
+        .s-item:nth-child(3) { border-top-color: #84cc16; }
+        .s-item:nth-child(4) { border-top-color: #f97316; }
+        
+        .item-label { 
+            font-size: 0.9rem; 
+            opacity: 0.8; 
+            font-weight: 500;
+        }
+        
+        .item-value { 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+            margin-top: 8px; 
+            color: #1e293b;
+        }
+        
+        /* Responsive */
         @media (max-width: 1400px) {
             .main-area { grid-template-columns: 1fr; }
-            .q-row { grid-template-columns: 1fr 1fr; }
+            .quarry-card { order: -1; }
         }
+        
         @media (max-width: 900px) {
-            .machines, .grid-4 { grid-template-columns: repeat(2, 1fr); }
-            .q-row { grid-template-columns: 1fr; }
+            .machines, .quarry-buttons, .production-grid { grid-template-columns: 1fr 1fr; }
+            .dispatch-grid, .stock-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="title-bar">
-        <i class="fas fa-tachometer-alt"></i> Live Operations Dashboard
+        <i class="fas fa-chart-line"></i>
+        Live Operations Dashboard
     </div>
-
     <div class="container">
-        <!-- Machines -->
+        <!-- Machine Availability -->
         <div class="machines">
             <div class="mach-box comp">
-                <i class="fas fa-compress-arrows-alt mach-icon"></i>
                 <div class="mach-label">Compressors Running</div>
                 <div class="mach-value" id="comp">11</div>
             </div>
             <div class="mach-box tipper">
-                <i class="fas fa-truck mach-icon"></i>
                 <div class="mach-label">Tippers Available</div>
                 <div class="mach-value" id="tipper">11/12</div>
             </div>
             <div class="mach-box exc">
-                <i class="fas fa-tools mach-icon"></i>
                 <div class="mach-label">Excavators Running</div>
                 <div class="mach-value" id="exc">5/5</div>
             </div>
             <div class="mach-box load">
-                <i class="fas fa-truck-loading mach-icon"></i>
                 <div class="mach-label">Loaders Running</div>
                 <div class="mach-value" id="load">2/2</div>
             </div>
         </div>
-
-        <!-- Main Content - Compact -->
+        
+        <!-- Main Content -->
         <div class="main-area">
             <!-- Left Column -->
-            <div class="left-stack">
-                <!-- Compact Quarry Metrics -->
-                <div class="quarry-compact">
-                    <h2><i class="fas fa-mountain"></i> Quarry Operations</h2>
-                    <div class="q-row">
-                        <div class="q-small trips">
-                            <i class="fas fa-exchange-alt"></i>
-                            <div class="label">Trips Today</div>
-                            <div class="value" id="trips">36</div>
+            <div class="left-column">
+                <!-- Quarry Operations Card with 3 buttons -->
+                <div class="quarry-card">
+                    <h2>Quarry Operations</h2>
+                    <div class="quarry-buttons">
+                        <div class="q-button trips">
+                            <div class="q-label">Trips Today</div>
+                            <div class="q-value" id="trips">36</div>
                         </div>
-                        <div class="q-small tonnage">
-                            <i class="fas fa-weight-hanging"></i>
-                            <div class="label">Boulder Tonnage</div>
-                            <div class="value" id="boulder-today">963 T</div>
+                        <div class="q-button tonnage">
+                            <div class="q-label">Boulder Tonnage</div>
+                            <div class="q-value" id="boulder-today">963 T</div>
                         </div>
-                        <div class="q-small feeder">
-                            <i class="fas fa-conveyor-belt"></i>
-                            <div class="label">Feeder to Plant</div>
-                            <div class="value" id="boulder-feeder">1,200 T</div>
+                        <div class="q-button feeder">
+                            <div class="q-label">Boulder Feeder to Plant</div>
+                            <div class="q-value" id="boulder-feeder">1,200 T</div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Production -->
-                <div class="production">
-                    <h2><i class="fas fa-cogs"></i> Production Today</h2>
-                    <div class="grid-4">
-                        <div class="item"><div class="item-label">10 mm</div><div class="item-value" id="p10">285 T</div></div>
-                        <div class="item"><div class="item-label">20 mm</div><div class="item-value" id="p20">312 T</div></div>
-                        <div class="item"><div class="item-label">River Sand</div><div class="item-value" id="psand">115 T</div></div>
-                        <div class="item"><div class="item-label">M Sand</div><div class="item-value" id="msand">140 T</div></div>
+                
+                <!-- Production Today -->
+                <div class="production-card">
+                    <h2>Production Today</h2>
+                    <div class="production-grid">
+                        <div class="p-item">
+                            <div class="p-label">10 mm</div>
+                            <div class="p-value" id="p10">285 T</div>
+                        </div>
+                        <div class="p-item">
+                            <div class="p-label">20 mm</div>
+                            <div class="p-value" id="p20">312 T</div>
+                        </div>
+                        <div class="p-item">
+                            <div class="p-label">River Sand</div>
+                            <div class="p-value" id="psand">115 T</div>
+                        </div>
+                        <div class="p-item">
+                            <div class="p-label">M Sand</div>
+                            <div class="p-value" id="msand">140 T</div>
+                        </div>
                     </div>
                 </div>
             </div>
-
+            
             <!-- Right Column -->
-            <div class="right-stack">
-                <!-- Dispatch -->
+            <div class="right-column">
+                <!-- Dispatch Today -->
                 <div class="section">
-                    <h2><i class="fas fa-truck-moving"></i> Dispatch Today</h2>
-                    <div class="grid-4">
-                        <div class="item"><div class="item-label">10 mm</div><div class="item-value" id="d10">245 T</div></div>
-                        <div class="item"><div class="item-label">20 mm</div><div class="item-value" id="d20">280 T</div></div>
-                        <div class="item"><div class="item-label">River Sand</div><div class="item-value" id="dsand">95 T</div></div>
-                        <div class="item"><div class="item-label">M Sand</div><div class="item-value" id="dmsand">120 T</div></div>
+                    <h2>Dispatch Today</h2>
+                    <div class="dispatch-grid">
+                        <div class="d-item">
+                            <div class="item-label">10 mm</div>
+                            <div class="item-value" id="d10">245 T</div>
+                        </div>
+                        <div class="d-item">
+                            <div class="item-label">20 mm</div>
+                            <div class="item-value" id="d20">280 T</div>
+                        </div>
+                        <div class="d-item">
+                            <div class="item-label">River Sand</div>
+                            <div class="item-value" id="dsand">95 T</div>
+                        </div>
+                        <div class="d-item">
+                            <div class="item-label">M Sand</div>
+                            <div class="item-value" id="dmsand">120 T</div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Stock -->
+                
+                <!-- Current Stock -->
                 <div class="section">
-                    <h2><i class="fas fa-warehouse"></i> Current Stock</h2>
-                    <div class="grid-4">
-                        <div class="item"><div class="item-label">10 mm</div><div class="item-value" id="s10">2,150 T</div></div>
-                        <div class="item"><div class="item-label">20 mm</div><div class="item-value" id="s20">3,420 T</div></div>
-                        <div class="item"><div class="item-label">River Sand</div><div class="item-value" id="ssand">1,650 T</div></div>
-                        <div class="item"><div class="item-label">M Sand</div><div class="item-value" id="smsand">980 T</div></div>
+                    <h2>Current Stock</h2>
+                    <div class="stock-grid">
+                        <div class="s-item">
+                            <div class="item-label">10 mm</div>
+                            <div class="item-value" id="s10">2,150 T</div>
+                        </div>
+                        <div class="s-item">
+                            <div class="item-label">20 mm</div>
+                            <div class="item-value" id="s20">3,420 T</div>
+                        </div>
+                        <div class="s-item">
+                            <div class="item-label">River Sand</div>
+                            <div class="item-value" id="ssand">1,650 T</div>
+                        </div>
+                        <div class="s-item">
+                            <div class="item-label">M Sand</div>
+                            <div class="item-value" id="smsand">980 T</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    
     <script>
-        function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-
+        function rand(min, max) { 
+            return Math.floor(Math.random() * (max - min + 1)) + min; 
+        }
+       
         function update() {
+            // Machine status updates
             document.getElementById('comp').textContent = 10 + rand(0,3);
             document.getElementById('tipper').textContent = `${8+rand(0,4)}/12`;
             document.getElementById('exc').textContent = `${4+rand(0,1)}/5`;
             document.getElementById('load').textContent = `2/2`;
-
-            const trips = 30 + rand(0, 20);
-            const boulderToday = 920 + rand(0, 100);
-            const boulderFeeder = 1150 + rand(0, 120);
+            
+            // Quarry Operations live updates
+            const trips = 30 + rand(0, 15);
+            const boulderToday = 920 + rand(0, 80);
+            const boulderFeeder = 1150 + rand(0, 100);
+            
             document.getElementById('trips').textContent = trips;
             document.getElementById('boulder-today').textContent = boulderToday + ' T';
             document.getElementById('boulder-feeder').textContent = boulderFeeder + ' T';
-
-            // Production
-            document.getElementById('p10').textContent = (270 + rand(0,50)) + ' T';
-            document.getElementById('p20').textContent = (300 + rand(0,50)) + ' T';
-            document.getElementById('psand').textContent = (100 + rand(0,40)) + ' T';
-            document.getElementById('msand').textContent = (130 + rand(0,40)) + ' T';
-
-            // Dispatch
-            document.getElementById('d10').textContent = (230 + rand(0,40)) + ' T';
-            document.getElementById('d20').textContent = (260 + rand(0,50)) + ' T';
-            document.getElementById('dsand').textContent = (85 + rand(0,30)) + ' T';
-            document.getElementById('dmsand').textContent = (110 + rand(0,35)) + ' T';
-
-            // Stock
-            document.getElementById('s10').textContent = (2100 + rand(-80,150)).toLocaleString() + ' T';
-            document.getElementById('s20').textContent = (3350 + rand(-100,200)).toLocaleString() + ' T';
-            document.getElementById('ssand').textContent = (1600 + rand(-80,150)).toLocaleString() + ' T';
-            document.getElementById('smsand').textContent = (950 + rand(-70,150)).toLocaleString() + ' T';
+            
+            // Production & Dispatch
+            document.getElementById('p10').textContent = (270 + rand(0,40)) + ' T';
+            document.getElementById('p20').textContent = (300 + rand(0,40)) + ' T';
+            document.getElementById('psand').textContent = (100 + rand(0,30)) + ' T';
+            document.getElementById('msand').textContent = (130 + rand(0,30)) + ' T';
+            
+            document.getElementById('d10').textContent = (230 + rand(0,30)) + ' T';
+            document.getElementById('d20').textContent = (260 + rand(0,40)) + ' T';
+            document.getElementById('dsand').textContent = (85 + rand(0,20)) + ' T';
+            document.getElementById('dmsand').textContent = (110 + rand(0,25)) + ' T';
+            
+            document.getElementById('s10').textContent = (2100 + rand(-50,100)).toLocaleString() + ' T';
+            document.getElementById('s20').textContent = (3350 + rand(-80,150)).toLocaleString() + ' T';
+            document.getElementById('ssand').textContent = (1600 + rand(-60,100)).toLocaleString() + ' T';
+            document.getElementById('smsand').textContent = (950 + rand(-50,100)).toLocaleString() + ' T';
         }
-
+        
         setInterval(update, 5000);
         update();
     </script>
