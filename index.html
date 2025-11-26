@@ -19,7 +19,7 @@
             --purple: #8b5cf6;
             --danger: #ef4444;
             --orange: #f97316;
-            --boulder: #7c3aed;
+            --boulder: #ea580c;
             --prod: #ea580c;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -61,11 +61,12 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.06);
             transform: translateY(-2px);
         }
+
         /* Machines */
-        .machines { 
-            display: grid; 
-            grid-template-columns: repeat(4,1fr); 
-            gap: 16px; 
+        .machines {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 16px;
         }
         .mach-box {
             border-top: 6px solid;
@@ -89,7 +90,7 @@
         }
         .left-stack, .right-stack {
             display: grid;
-            grid-template-rows: auto auto 1fr;
+            grid-template-rows: auto 1fr;
             gap: 18px;
         }
         .right-stack { grid-template-rows: 1fr 1fr; }
@@ -101,23 +102,35 @@
             text-align: center;
             color: var(--text);
         }
-        .boulder-ops h2 { color: var(--boulder); }
-        .production h2 { color: var(--prod); }
 
-        /* Boulder Operations - 3 Big Boxes */
+        /* === MERGED BOULDER + PRODUCTION CARD (ORANGE BORDER) === */
+        .merged-ops-prod {
+            border: 3px solid var(--orange) !important;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+        .section-title {
+            font-size: 1.55rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--orange);
+        }
         .boulder-row {
             display: grid;
             grid-template-columns: repeat(3,1fr);
             gap: 16px;
+            margin-bottom: 28px;
         }
         .boulder-item {
             padding: 20px 12px;
             text-align: center;
-            border: 2px solid var(--border);
+            background: #fff8f2;
+            border: 2px solid #fed7aa;
             border-radius: 10px;
-            transition: all 0.25s ease;
+            transition: all 0.25s;
         }
-        .boulder-item:hover { border-color: #94a3b8; }
+        .boulder-item:hover { border-color: var(--orange); }
         .boulder-item i { font-size: 2.2rem; margin-bottom: 10px; opacity: 0.85; }
         .trips i { color: var(--primary); }
         .tonnage i { color: var(--orange); }
@@ -125,7 +138,6 @@
         .boulder-item .label { font-size: 0.95rem; color: var(--text-light); font-weight: 600; }
         .boulder-item .value { font-size: 2.1rem; font-weight: 800; margin-top: 6px; }
 
-        /* Production - Unified Card */
         .grid-4 {
             display: grid;
             grid-template-columns: repeat(4,1fr);
@@ -134,11 +146,12 @@
         .item {
             padding: 18px 10px;
             text-align: center;
-            border: 2px solid var(--border);
+            background: #fff8f2;
+            border: 2px solid #fed7aa;
             border-radius: 10px;
-            transition: all 0.25s ease;
+            transition: all 0.25s;
         }
-        .item:hover { border-color: #94a3b8; }
+        .item:hover { border-color: var(--orange); }
         .item-label { font-size: 0.92rem; color: var(--text-light); font-weight: 600; }
         .item-value { font-size: 1.8rem; font-weight: 700; margin-top: 8px; }
 
@@ -158,6 +171,7 @@
     <div class="title-bar">
         <i class="fas fa-tachometer-alt"></i> Live Operations Dashboard
     </div>
+
     <div class="container">
         <!-- Machines -->
         <div class="machines">
@@ -185,11 +199,12 @@
 
         <!-- Main Content -->
         <div class="main-area">
-            <!-- Left Column -->
+            <!-- Left Column - Merged Boulder + Production -->
             <div class="left-stack">
-                <!-- Boulder Operations -->
-                <div class="card boulder-ops">
-                    <h2><i class="fas fa-mountain"></i> Boulder Operations</h2>
+                <div class="card merged-ops-prod">
+                    <h2 class="section-title"><i class="fas fa-mountain"></i> Boulder Operations & Production Today</h2>
+
+                    <!-- Boulder Operations -->
                     <div class="boulder-row">
                         <div class="boulder-item trips">
                             <i class="fas fa-exchange-alt"></i>
@@ -199,28 +214,25 @@
                         <div class="boulder-item tonnage">
                             <i class="fas fa-weight-hanging"></i>
                             <div class="label">Boulder Tonnage</div>
-                            <div class="value" id="boulder-today">1,020</div>
+                            <div class="value" id="boulder-today">966</div>
                         </div>
                         <div class="boulder-item feeder">
                             <i class="fas fa-conveyor-belt"></i>
                             <div class="label">Feeder to Plant</div>
-                            <div class="value" id="boulder-feeder">1,181</div>
+                            <div class="value" id="boulder-feeder">1,232</div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Production Today (Unified) -->
-                <div class="card production">
-                    <h2><i class="fas fa-cogs"></i> Production Today</h2>
+                    <!-- Production Today (inside same card) -->
+                    <h2 style="text-align:center; color:var(--orange); margin:24px 0 16px;"><i class="fas fa-cogs"></i> Production Today</h2>
                     <div class="grid-4">
-                        <div class="item"><div class="item-label">10 mm</div><div class="item-value" id="p10">294</div></div>
-                        <div class="item"><div class="item-label">20 mm</div><div class="item-value" id="p20">330</div></div>
-                        <div class="item"><div class="item-label">River Sand</div><div class="item-value" id="psand">120</div></div>
-                        <div class="item"><div class="item-label">M Sand</div><div class="item-value" id="msand">150</div></div>
+                        <div class="item"><div class="item-label">10 mm</div><div class="item-value" id="p10">319</div></div>
+                        <div class="item"><div class="item-label">20 mm</div><div class="item-value" id="p20">346</div></div>
+                        <div class="item"><div class="item-label">River Sand</div><div class="item-value" id="psand">133</div></div>
+                        <div class="item"><div class="item-label">M Sand</div><div class="item-value" id="msand">165</div></div>
                     </div>
                 </div>
-
-                <!-- You can add more cards here if needed -->
+                <!-- You can add more cards below if needed -->
             </div>
 
             <!-- Right Column -->
@@ -234,6 +246,7 @@
                         <div class="item"><div class="item-label">M Sand</div><div class="item-value" id="dmsand">120</div></div>
                     </div>
                 </div>
+
                 <div class="card">
                     <h2><i class="fas fa-warehouse"></i> Current Stock</h2>
                     <div class="grid-4">
@@ -249,7 +262,7 @@
 
     <script>
         function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-        
+
         function update() {
             // Machines
             document.getElementById('comp').textContent = 10 + rand(0,3);
@@ -258,22 +271,21 @@
             document.getElementById('load').textContent = `2/2`;
 
             // Boulder Operations
-            document.getElementById('trips').textContent = 25 + rand(0, 25);  // varies around 34
+            document.getElementById('trips').textContent = 25 + rand(0, 25);
             document.getElementById('boulder-today').textContent = 950 + rand(0, 120);
             document.getElementById('boulder-feeder').textContent = (1150 + rand(0, 100)).toLocaleString();
 
             // Production Today
-            document.getElementById('p10').textContent = 270 + rand(0, 50);
-            document.getElementById('p20').textContent = 310 + rand(0, 50);
-            document.getElementById('psand').textContent = 100 + rand(0, 40);
-            document.getElementById('msand').textContent = 130 + rand(0, 40);
+            document.getElementById('p10').textContent = 290 + rand(0, 50);
+            document.getElementById('p20').textContent = 320 + rand(0, 50);
+            document.getElementById('psand').textContent = 110 + rand(0, 40);
+            document.getElementById('msand').textContent = 140 + rand(0, 40);
 
-            // Dispatch & Stock (still random for demo)
+            // Dispatch & Stock
             document.getElementById('d10').textContent = 230 + rand(0,40);
             document.getElementById('d20').textContent = 260 + rand(0,50);
             document.getElementById('dsand').textContent = 85 + rand(0,30);
             document.getElementById('dmsand').textContent = 110 + rand(0,35);
-
             document.getElementById('s10').textContent = (2100 + rand(-80,150)).toLocaleString();
             document.getElementById('s20').textContent = (3350 + rand(-100,200)).toLocaleString();
             document.getElementById('ssand').textContent = (1600 + rand(-80,150)).toLocaleString();
