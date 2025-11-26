@@ -6,26 +6,35 @@
     <title>Quarry Operations Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* === FULL WINDOW COVERAGE === */
         html, body {
             height: 100%;
-            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;                 /* No scrollbars ever */
             background-color: #f0f2f5;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #333;
         }
 
+        body {
+            display: flex;                    /* Ensures children stretch */
+        }
+
         .dashboard {
-            max-width: 1400px;
-            margin: 0 auto;
-            height: 100vh;
+            width: 100vw;
+            height: 100vh;                    /* Full viewport height */
+            max-width: none;                  /* Remove max-width limit */
+            margin: 0;
+            padding: 12px;
             display: grid;
             grid-template-rows: auto auto auto 1fr auto auto;
             gap: 12px;
-            padding: 12px;
             overflow: hidden;
+            background-color: #f0f2f5;
         }
 
+        /* Rest of your beautiful styles (unchanged except minor tweaks) */
         .header {
             text-align: center;
             padding: 14px;
@@ -37,27 +46,12 @@
         .header h1 { font-size: 2rem; margin-bottom: 4px; }
         .header p { font-size: 1rem; opacity: 0.9; }
 
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
+        .stats-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
         .stat-card {
-            background: white;
-            border-radius: 10px;
-            padding: 14px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-            text-align: center;
+            background: white; border-radius: 10px; padding: 14px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08); text-align: center;
         }
-        .stat-card h3 {
-            font-size: 0.95rem;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            color: #555;
-        }
+        .stat-card h3 { font-size: 0.95rem; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; color: #555; }
         .stat-value { font-size: 1.9rem; font-weight: bold; }
 
         .compressor-card { border-top: 4px solid #e74c3c; }
@@ -69,114 +63,45 @@
         .loader-card { border-top: 4px solid #9b59b6; }
         .loader-card h3 i, .loader-card .stat-value { color: #9b59b6; }
 
-        .middle-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            min-height: 0;
+        .middle-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; min-height: 0; }
+        .operations-panel, .flow-container, .dispatch-container, .stock-container, .product-card {
+            background: white; border-radius: 10px; padding: 14px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08); overflow-y: auto;
         }
-
-        .operations-panel {
-            background: white;
-            border-radius: 10px;
-            padding: 14px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-            overflow-y: auto;
-        }
-        .operations-panel h2 {
-            font-size: 1.2rem;
-            color: #1a6bc4;
-            margin-bottom: 10px;
-            padding-bottom: 6px;
-            border-bottom: 2px solid #f0f2f5;
-        }
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            font-size: 0.95rem;
-            border-bottom: 1px solid #f0f2f5;
-        }
-        .info-item:last-child { border-bottom: none; }
-        .info-label { color: #555; font-weight: 600; }
-        .info-value { color: #1a6bc4; font-weight: bold; }
-
-        .flow-container {
-            background: white;
-            border-radius: 10px;
-            padding: 14px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-        }
-        .flow-box { text-align: center; }
-        .flow-box h3 { font-size: 1.1rem; color: #1a6bc4; margin-bottom: 6px; }
-        .flow-box p { font-size: 2rem; font-weight: bold; color: #0d4d96; margin: 0; }
-        .product-unit { font-size: 0.9rem; color: #666; }
-        .flow-arrow { font-size: 2.8rem; color: #1a6bc4; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
-
-        .products-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
-        .product-card {
-            background: white;
-            border-radius: 10px;
-            padding: 14px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-        }
-        .product-card h3 { font-size: 1rem; color: #1a6bc4; margin-bottom: 8px; }
-        .product-value { font-size: 1.7rem; font-weight: bold; color: #0d4d96; }
-
-        .bottom-sections {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            overflow: hidden;
-        }
-        .dispatch-container, .stock-container {
-            background: white;
-            border-radius: 10px;
-            padding: 14px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-            overflow-y: auto;
+        .operations-panel h2, .dispatch-container h2, .stock-container h2 {
+            font-size: 1.2rem; color: #1a6bc4; margin-bottom: 10px;
+            padding-bottom: 6px; border-bottom: 2px solid #f0f2f5;
         }
         .dispatch-container { border-top: 4px solid #e67e22; }
         .dispatch-container h2 { color: #e67e22; }
         .stock-container { border-top: 4px solid #16a085; }
         .stock-container h2 { color: #16a085; }
 
-        .dispatch-container h2, .stock-container h2 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            padding-bottom: 6px;
-            border-bottom: 2px solid #f0f2f5;
-        }
-        .dispatch-stats, .stock-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
+        .info-item { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.95rem; border-bottom: 1px solid #f0f2f5; }
+        .info-item:last-child { border-bottom: none; }
+        .info-label { color: #555; font-weight: 600; }
+        .info-value { color: #1a6bc4; font-weight: bold; }
+
+        .flow-container { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; }
+        .flow-box h3 { font-size: 1.1rem; color: #1a6bc4; margin-bottom: 6px; }
+        .flow-box p { font-size: 2rem; font-weight: bold; color: #0d4d96; margin: 0; }
+        .product-unit { font-size: 0.9rem; color: #666; }
+        .flow-arrow { font-size: 2.8rem; color: #1a6bc4; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
+
+        .products-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .product-card h3 { font-size: 1rem; color: #1a6bc4; margin-bottom: 8px; }
+        .product-value { font-size: 1.7rem; font-weight: bold; color: #0d4d96; }
+
+        .bottom-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; overflow: hidden; }
+        .dispatch-stats, .stock-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .dispatch-stat, .stock-item {
-            background: #fff9f2;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            border-left: 4px solid #e67e22;
+            padding: 12px; border-radius: 8px; text-align: center;
         }
-        .stock-item { background: #f2f9f8; border-left-color: #16a085; }
-        .dispatch-value, .stock-value {
-            font-size: 1.6rem;
-            font-weight: bold;
-        }
-        .dispatch-value { color: #e67e22; }
-        .stock-value { color: #16a085; }
+        .dispatch-stat { background: #fff9f2; border-left: 4px solid #e67e22; }
+        .stock-item { background: #f2f9f8; border-left: 4px solid #16a085; }
+        .dispatch-value { font-size: 1.6rem; font-weight: bold; color: #e67e22; }
+        .stock-value { font-size: 1.6rem; font-weight: bold; color: #16a085; }
 
         /* Responsive */
         @media (max-width: 1200px) {
@@ -193,11 +118,11 @@
 </head>
 <body>
     <div class="dashboard">
+        <!-- Your existing dashboard HTML (unchanged) -->
         <div class="header">
             <h1>Quarry Operations Dashboard</h1>
             <p>Real-time • No Scrolling • Auto Refresh Every 5 Sec</p>
         </div>
-
         <div class="stats-container">
             <div class="stat-card compressor-card">
                 <h3><i class="fas fa-compress-arrows-alt"></i> Compressors Running</h3>
@@ -209,14 +134,13 @@
             </div>
             <div class="stat-card excavator-card">
                 <h3><i class="fas fa-digging"></i> Excavators Running</h3>
-                <div class="stat-value">4/5</div>
+                <div class.used class="stat-value">4/5</div>
             </div>
             <div class="stat-card loader-card">
                 <h3><i class="fas fa-tractor"></i> Loaders Running</h3>
                 <div class="stat-value">2/2</div>
             </div>
         </div>
-
         <div class="middle-row">
             <div class="operations-panel quarry-info">
                 <h2>Quarry Operations</h2>
@@ -227,7 +151,6 @@
                 <div class="info-item"><span class="info-label">Boulder Stock at Plant</span><span class="info-value">12,565 T</span></div>
                 <div class="info-item"><span class="info-label">Boulder Added Today</span><span class="info-value">956 T</span></div>
             </div>
-
             <div class="flow-container">
                 <div class="flow-box">
                     <h3>Quarry</h3>
@@ -242,7 +165,6 @@
                 </div>
             </div>
         </div>
-
         <div class="products-container">
             <div class="product-card">
                 <h3>10 mm Aggregate</h3>
@@ -265,7 +187,6 @@
                 <div class="product-unit">Produced Today</div>
             </div>
         </div>
-
         <div class="bottom-sections">
             <div class="dispatch-container">
                 <h2>Dispatch Today</h2>
@@ -276,7 +197,6 @@
                     <div class="dispatch-stat"><h4>M Sand</h4><div class="dispatch-value">120 T</div></div>
                 </div>
             </div>
-
             <div class="stock-container">
                 <h2>Current Stock</h2>
                 <div class="stock-grid">
@@ -292,7 +212,6 @@
 
     <script>
         function updateDashboard() {
-            // Random small fluctuations
             const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
             // Equipment
@@ -318,7 +237,7 @@
             document.querySelectorAll('.flow-box p')[0].textContent = `${flow} T`;
             document.querySelectorAll('.flow-box p')[1].textContent = `${flow} T`;
 
-            // Products
+            // Products Produced Today
             document.querySelectorAll('.product-value')[0].textContent = `${285 + rand(-10, 20)} T`;
             document.querySelectorAll('.product-value')[1].textContent = `${312 + rand(-10, 20)} T`;
             document.querySelectorAll('.product-value')[2].textContent = `${115 + rand(-8, 15)} T`;
@@ -338,9 +257,8 @@
             document.querySelectorAll('.stock-value')[4].textContent = `${boulderStock.toLocaleString()} T`;
         }
 
-        // Update every 5 seconds
         setInterval(updateDashboard, 5000);
-        updateDashboard(); // Initial update
+        updateDashboard();
     </script>
 </body>
 </html>
