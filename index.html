@@ -257,16 +257,18 @@
             color: #0d4d96;
         }
         
+        /* Dispatch Container with new colors */
         .dispatch-container {
             background: white;
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
             margin-bottom: 30px;
+            border-top: 4px solid #e67e22;
         }
         
         .dispatch-container h2 {
-            color: #1a6bc4;
+            color: #e67e22;
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 2px solid #f0f2f5;
@@ -282,7 +284,8 @@
             text-align: center;
             padding: 15px;
             border-radius: 8px;
-            background: #f8f9fa;
+            background: #fff9f2;
+            border-left: 4px solid #e67e22;
         }
         
         .dispatch-stat h4 {
@@ -293,18 +296,20 @@
         .dispatch-value {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #1a6bc4;
+            color: #e67e22;
         }
         
+        /* Stock Container with new colors */
         .stock-container {
             background: white;
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #16a085;
         }
         
         .stock-container h2 {
-            color: #1a6bc4;
+            color: #16a085;
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 2px solid #f0f2f5;
@@ -320,7 +325,8 @@
             text-align: center;
             padding: 15px;
             border-radius: 8px;
-            background: #f8f9fa;
+            background: #f2f9f8;
+            border-left: 4px solid #16a085;
         }
         
         .stock-item h4 {
@@ -331,7 +337,7 @@
         .stock-value {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #1a6bc4;
+            color: #16a085;
         }
         
         @media (max-width: 1024px) {
@@ -381,17 +387,17 @@
             
             <div class="stat-card tipper-card">
                 <h3><i class="fas fa-truck-moving"></i> Tippers Available</h3>
-                <div class="stat-value">9</div>
+                <div class="stat-value">9/12</div>
             </div>
             
             <div class="stat-card excavator-card">
                 <h3><i class="fas fa-digging"></i> Excavators Running</h3>
-                <div class="stat-value">13</div>
+                <div class="stat-value">4/5</div>
             </div>
             
             <div class="stat-card loader-card">
                 <h3><i class="fas fa-tractor"></i> Loaders Running</h3>
-                <div class="stat-value">8</div>
+                <div class="stat-value">2/2</div>
             </div>
         </div>
         
@@ -414,27 +420,18 @@
                     <span class="info-label">Achievement</span>
                     <span class="info-value">31.9%</span>
                 </div>
-            </div>
-            
-            <div class="operations-panel plant-info">
-                <h2>Plant Operations</h2>
                 <div class="info-item">
                     <span class="info-label">Boulder Stock at Plant</span>
                     <span class="info-value">12,565 T</span>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">Boulder Added Today</span>
+                    <span class="info-label">Boulder Added To Stock</span>
                     <span class="info-value">956 T</span>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">Plant Efficiency</span>
-                    <span class="info-value">89.1%</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Operating Hours</span>
-                    <span class="info-value">18/24</span>
-                </div>
             </div>
+            
+          
+            
         </div>
         
         <div class="flow-container">
