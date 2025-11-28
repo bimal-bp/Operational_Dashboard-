@@ -10,26 +10,36 @@
         :root {
             --bg: #f8fafc;
             --card: #ffffff;
+            --card-hover: #f1f5f9;
             --text: #1e293b;
             --text-light: #64748b;
-            --border: #cbd5e1;
+            --border: #e2e8f0;
             --primary: #3b82f6;
+            --primary-light: #60a5fa;
             --success: #10b981;
+            --success-light: #34d399;
             --warning: #f59e0b;
+            --warning-light: #fbbf24;
             --purple: #8b5cf6;
+            --purple-light: #a78bfa;
             --danger: #ef4444;
+            --danger-light: #f87171;
             --orange: #f97316;
-            --boulder: #ea580c;
-            --prod: #ea580c;
+            --orange-light: #fb923c;
+            --teal: #14b8a6;
+            --teal-light: #2dd4bf;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 8px 15px rgba(0, 0, 0, 0.1);
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
             height: 100vh;
-            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             color: var(--text);
             font-family: 'Inter', sans-serif;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
         .title-bar {
             background: linear-gradient(90deg, #1e40af, #3b82f6);
@@ -39,6 +49,8 @@
             font-weight: 700;
             text-align: center;
             box-shadow: 0 4px 20px rgba(59,130,246,0.5);
+            position: relative;
+            z-index: 10;
         }
         .title-bar i { margin-right: 10px; }
         .container {
@@ -51,17 +63,18 @@
         }
         .card {
             background: var(--card);
-            border: 2px solid var(--border);
+            border: 1px solid var(--border);
             border-radius: 12px;
             padding: 20px;
             transition: all 0.25s ease;
+            box-shadow: var(--shadow);
         }
         .card:hover {
-            border-color: #94a3b8;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-hover);
             transform: translateY(-2px);
+            background: var(--card-hover);
         }
-
         /* Machines */
         .machines {
             display: grid;
@@ -72,168 +85,689 @@
             border-top: 6px solid;
             text-align: center;
             padding: 16px 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        .mach-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
         }
         .comp { border-top-color: var(--danger); }
         .tipper { border-top-color: var(--success); }
-        .exc { border-top-color: var(--warning); }
-        .load { border-top-color: var(--purple); }
-        .mach-icon { font-size: 2.4rem; margin-bottom: 10px; opacity: 0.9; }
-        .mach-label { font-size: 0.95rem; color: var(--text-light); font-weight: 600; }
-        .mach-value { font-size: 2.3rem; font-weight: 700; margin-top: 6px; }
+        .exc-load { border-top-color: var(--warning); }
+        .ftd-mtd { border-top-color: var(--purple); }
+        .mach-icon { 
+            font-size: 2.4rem; 
+            margin-bottom: 10px; 
+            opacity: 0.9; 
+            background: linear-gradient(135deg, currentColor, rgba(59, 130, 246, 0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .mach-label { 
+            font-size: 0.95rem; 
+            color: var(--text-light); 
+            font-weight: 600; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .mach-value { 
+            font-size: 2.3rem; 
+            font-weight: 700; 
+            margin-top: 6px; 
+            background: linear-gradient(135deg, var(--text), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Combined Excavator/Loader Box */
+        .combined-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .combined-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--warning);
+            transition: all 0.3s ease;
+        }
+        .combined-item:hover {
+            background: rgba(245, 158, 11, 0.2);
+            transform: translateX(4px);
+        }
+        .combined-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+        .combined-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text);
+        }
 
-        /* Main Area */
+        /* Main Layout */
         .main-area {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 18px;
             height: 100%;
         }
-        .left-stack, .right-stack {
+        .left-stack {
             display: grid;
-            grid-template-rows: auto 1fr;
+            grid-template-rows: auto;
             gap: 18px;
         }
-        .right-stack { grid-template-rows: 1fr 1fr; }
 
-        h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-            text-align: center;
-            color: var(--text);
-        }
-
-        /* === MERGED BOULDER + PRODUCTION CARD (ORANGE BORDER) === */
+        /* Boulder + Dispatch Card */
         .merged-ops-prod {
-            border: 3px solid var(--orange) !important;
+            border: 2px solid var(--orange) !important;
             border-radius: 14px;
             overflow: hidden;
-            min-height: 500px; /* Increased height */
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.05), rgba(249, 115, 22, 0.1));
+            position: relative;
+        }
+        .merged-ops-prod::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--orange), var(--orange-light));
         }
         .section-title {
-            font-size: 1.55rem;
+            font-size: 1.65rem;
             font-weight: 700;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 28px;
             color: var(--orange);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--orange), transparent);
         }
         .boulder-row {
             display: grid;
             grid-template-columns: repeat(3,1fr);
-            gap: 16px;
-            margin-bottom: 28px;
+            gap: 20px;
+            margin-bottom: 32px;
         }
         .boulder-item {
-            padding: 20px 12px;
+            padding: 24px 16px;
             text-align: center;
-            background: #fff8f2;
-            border: 2px solid #fed7aa;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(254, 215, 170, 0.5);
+            border-radius: 12px;
             transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
         }
-        .boulder-item:hover { border-color: var(--orange); }
-        .boulder-item i { font-size: 2.2rem; margin-bottom: 10px; opacity: 0.85; }
+        .boulder-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--orange), var(--orange-light));
+        }
+        .boulder-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--orange);
+            background: white;
+        }
+        .boulder-item i { 
+            font-size: 2.4rem; 
+            margin-bottom: 12px; 
+            opacity: 0.9; 
+            background: linear-gradient(135deg, currentColor, rgba(59, 130, 246, 0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
         .trips i { color: var(--primary); }
         .tonnage i { color: var(--orange); }
         .feeder i { color: var(--danger); }
-        .boulder-item .label { font-size: 0.95rem; color: var(--text-light); font-weight: 600; }
-        .boulder-item .value { font-size: 2.1rem; font-weight: 800; margin-top: 6px; }
+        .boulder-item .label { 
+            font-size: 1rem; 
+            color: var(--text-light); 
+            font-weight: 600; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .boulder-item .value { 
+            font-size: 2.4rem; 
+            font-weight: 800; 
+            margin-top: 8px; 
+            background: linear-gradient(135deg, var(--text), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .boulder-item .trip-count {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 8px;
+            color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
 
-        .grid-4 {
+        /* Dispatch Grid */
+        .dispatch-grid {
             display: grid;
             grid-template-columns: repeat(4,1fr);
-            gap: 14px;
-        }
-        .item {
-            padding: 18px 10px;
-            text-align: center;
-            background: #fff8f2;
-            border: 2px solid #fed7aa;
-            border-radius: 10px;
-            transition: all 0.25s;
-        }
-        .item:hover { border-color: var(--orange); }
-        .item-label { font-size: 0.92rem; color: var(--text-light); font-weight: 600; }
-        .item-value { font-size: 1.8rem; font-weight: 700; margin-top: 8px; }
-
-        /* NEW STYLES FOR DISPATCH AND STOCK CARDS */
-        .dispatch-card {
-            border: 3px solid var(--primary) !important;
-            border-radius: 14px;
-            overflow: hidden;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-        }
-        .dispatch-card h2 {
-            color: var(--primary);
+            gap: 20px;
         }
         .dispatch-item {
-            padding: 18px 10px;
+            padding: 24px 16px;
             text-align: center;
-            background: #f0f9ff;
-            border: 2px solid #bae6fd;
+            background: rgba(254, 252, 232, 0.3);
+            border: 1px solid rgba(253, 230, 138, 0.5);
             border-radius: 10px;
             transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .dispatch-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--warning), var(--warning-light));
         }
         .dispatch-item:hover {
-            border-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(59,130,246,0.2);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--warning);
+            background: white;
         }
-        .dispatch-item .item-label { 
-            font-size: 0.92rem; 
-            color: var(--text-light); 
+        .dispatch-item .label { 
+            font-size: 1rem; 
+            color: var(--warning); 
             font-weight: 600; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .dispatch-item .item-value { 
-            font-size: 1.8rem; 
+        .dispatch-item .value { 
+            font-size: 2.2rem; 
             font-weight: 700; 
-            margin-top: 8px;
-            color: var(--primary);
+            margin-top: 8px; 
+            color: var(--warning);
+            background: linear-gradient(135deg, var(--warning), var(--warning-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Dispatch Vehicles - IMPROVED STYLING */
+        .dispatch-vehicles {
+            margin-top: 30px;
+            padding: 24px 16px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+            border: none;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(3, 105, 161, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .dispatch-vehicles::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .dispatch-vehicles:hover::before {
+            left: 100%;
+        }
+        .dispatch-vehicles:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(3, 105, 161, 0.4);
+            background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+        }
+        .dispatch-vehicles .label {
+            font-size: 1.3rem;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        .dispatch-vehicles .value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .dispatch-vehicles i {
+            font-size: 2.2rem;
+            color: white;
+            opacity: 0.9;
         }
 
-        .stock-card {
-            border: 3px solid var(--success) !important;
-            border-radius: 14px;
+        /* Clickable Items */
+        .feeder-clickable, .ftd-mtd-clickable, .tipper-clickable, .comp-clickable {
+            cursor: pointer;
+            border: 2px solid var(--primary) !important;
+            animation: pulse 2s infinite;
+        }
+        .feeder-clickable:hover, .ftd-mtd-clickable:hover, .tipper-clickable:hover, .comp-clickable:hover {
+            border-color: var(--primary-light) !important;
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+
+        /* Map Section */
+        .map-container {
+            border-radius: 12px;
             overflow: hidden;
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            border: 1px solid var(--border);
         }
-        .stock-card h2 {
-            color: var(--success);
-        }
-        .stock-item {
-            padding: 18px 10px;
+        .map-header {
+            background: linear-gradient(90deg, #1e293b, #334155);
+            color: white;
+            padding: 16px;
             text-align: center;
-            background: #f0fdf4;
-            border: 2px solid #bbf7d0;
-            border-radius: 10px;
-            transition: all 0.25s;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
         }
-        .stock-item:hover {
-            border-color: var(--success);
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(16,185,129,0.2);
+        .map-image {
+            flex: 1;
+            background-color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
-        .stock-item .item-label { 
-            font-size: 0.92rem; 
-            color: var(--text-light); 
-            font-weight: 600; 
+        .map-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
         }
-        .stock-item .item-value { 
-            font-size: 1.8rem; 
-            font-weight: 700; 
-            margin-top: 8px;
+        .map-container:hover .map-image img {
+            transform: scale(1.02);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background-color: var(--card);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            animation: modalFadeIn 0.3s;
+            border: 1px solid var(--border);
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-header {
+            padding: 20px;
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            color: white;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .modal-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .close-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        .modal-section {
+            margin-bottom: 20px;
+        }
+        .modal-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 5px;
+        }
+        .modal-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .modal-table th, .modal-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .modal-table th {
+            background-color: rgba(59, 130, 246, 0.1);
+            font-weight: 600;
+            color: var(--primary-light);
+        }
+        .modal-table tr:hover {
+            background-color: rgba(0,0,0,0.02);
+        }
+        
+        /* Image Modal */
+        .image-modal-content {
+            max-width: 95%;
+            max-height: 95%;
+        }
+        .image-modal-body {
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .image-modal-body img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+        }
+        
+        /* NEW: FTD/MTD Reports Side by Side */
+        .reports-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .report-card {
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            flex: 1;
+            max-width: 50%;
+            border: 1px solid var(--border);
+        }
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--purple);
+        }
+        .report-header {
+            background: linear-gradient(90deg, var(--purple), var(--purple-light));
+            color: white;
+            padding: 16px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .report-image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-bottom: 1px solid var(--border);
+        }
+        .report-footer {
+            padding: 12px;
+            text-align: center;
+            background: rgba(0,0,0,0.02);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* NEW: Zoom Modal for Reports */
+        .zoom-modal-content {
+            max-width: 95%;
+            max-height: 95%;
+            width: auto;
+        }
+        .zoom-modal-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .zoom-modal-body img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        .report-title {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--purple);
+            text-align: center;
+        }
+
+        /* NEW: Image Gallery Styles */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .image-gallery-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .gallery-item {
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid var(--border);
+        }
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+        .gallery-header {
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 16px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .gallery-image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-bottom: 1px solid var(--border);
+        }
+        .gallery-footer {
+            padding: 12px;
+            text-align: center;
+            background: rgba(0,0,0,0.02);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* NEW: Compressor Report Styles - MODERNIZED */
+        .production-table-container {
+            margin-top: 20px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .section-header .section-title {
+            margin-bottom: 0;
+            left: 0;
+            transform: none;
+        }
+        .target-badge {
+            display: flex;
+            gap: 10px;
+        }
+        .target-badge span {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+        .production-table-container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        .production-table-container th, .production-table-container td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .production-table-container th {
+            background: linear-gradient(135deg, var(--warning), var(--warning-light));
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .production-table-container tr:last-child td {
+            border-bottom: none;
+        }
+        .production-table-container tr:hover {
+            background-color: rgba(0,0,0,0.02);
+        }
+        .production-table-container .highlight {
+            background-color: rgba(245, 158, 11, 0.1);
+            font-weight: 600;
+        }
+        .production-table-container .achievement-high {
             color: var(--success);
+            font-weight: 700;
+        }
+        .production-table-container .percentage {
+            color: var(--success);
+            font-weight: 600;
         }
 
         /* Responsive */
         @media (max-width: 1400px) {
             .main-area { grid-template-columns: 1fr; }
+            .map-container { height: 500px; }
         }
         @media (max-width: 900px) {
-            .machines, .grid-4, .boulder-row { grid-template-columns: 1fr 1fr; }
+            .machines, .boulder-row, .dispatch-grid { grid-template-columns: 1fr; }
+            .reports-container, .image-gallery, .image-gallery-2 { 
+                grid-template-columns: 1fr; 
+                flex-direction: column;
+            }
+            .report-card, .gallery-item { max-width: 100%; }
+            .production-table-container th, .production-table-container td {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
         @media (max-width: 600px) {
-            .machines, .grid-4, .boulder-row { grid-template-columns: 1fr; }
+            .machines, .boulder-row, .dispatch-grid { grid-template-columns: 1fr; }
+            .modal-content { width: 95%; }
+            .dispatch-vehicles {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .dispatch-vehicles .label {
+                font-size: 1.1rem;
+            }
+            .dispatch-vehicles .value {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
@@ -241,128 +775,358 @@
     <div class="title-bar">
         <i class="fas fa-tachometer-alt"></i> Live Operations Dashboard
     </div>
-
     <div class="container">
         <!-- Machines -->
         <div class="machines">
-            <div class="card mach-box comp">
+            <div class="card mach-box comp comp-clickable" onclick="openModal('compressor-modal')">
                 <i class="fas fa-compress-arrows-alt mach-icon"></i>
                 <div class="mach-label">Compressors Running</div>
-                <div class="mach-value" id="comp">11</div>
+                <div class="mach-value" id="comp">10</div>
             </div>
-            <div class="card mach-box tipper">
+            <div class="card mach-box tipper tipper-clickable" onclick="openModal('tipper-modal')">
                 <i class="fas fa-truck mach-icon"></i>
                 <div class="mach-label">Tippers Available</div>
                 <div class="mach-value" id="tipper">11/12</div>
             </div>
-            <div class="card mach-box exc">
-                <i class="fas fa-tools mach-icon"></i>
-                <div class="mach-label">Excavators Running</div>
-                <div class="mach-value" id="exc">5/5</div>
+            <div class="card mach-box exc-load">
+                <div class="combined-box">
+                    <div class="combined-item">
+                        <span class="combined-label">Excavators Running</span>
+                        <span class="combined-value" id="exc">4/5</span>
+                    </div>
+                    <div class="combined-item">
+                        <span class="combined-label">Loaders Running</span>
+                        <span class="combined-value" id="load">2/2</span>
+                    </div>
+                </div>
             </div>
-            <div class="card mach-box load">
-                <i class="fas fa-truck-loading mach-icon"></i>
-                <div class="mach-label">Loaders Running</div>
-                <div class="mach-value" id="load">2/2</div>
+            <div class="card mach-box ftd-mtd ftd-mtd-clickable" onclick="openModal('ftd-mtd-modal')">
+                <i class="fas fa-chart-line mach-icon"></i>
+                <div class="mach-label">FTD / MTD MIS</div>
+                <div class="mach-value">Reports</div>
             </div>
         </div>
 
         <!-- Main Content -->
         <div class="main-area">
-            <!-- Left Column - Merged Boulder + Production -->
+            <!-- Left: Boulder Ops + Dispatch -->
             <div class="left-stack">
                 <div class="card merged-ops-prod">
-                    <h2 class="section-title"><i class="fas fa-mountain"></i> Boulder Operations & Production Today</h2>
-
-                    <!-- Boulder Operations -->
+                    <h2 class="section-title"><i class="fas fa-mountain"></i> Boulder Operations & Dispatch Update </h2>
+                    
+                    <!-- Boulder Operations Row -->
                     <div class="boulder-row">
                         <div class="boulder-item trips">
                             <i class="fas fa-exchange-alt"></i>
                             <div class="label">Trips Today</div>
-                            <div class="value" id="trips">34</div>
+                            <div class="value" id="trips">49</div>
                         </div>
                         <div class="boulder-item tonnage">
                             <i class="fas fa-weight-hanging"></i>
                             <div class="label">Boulder Tonnage</div>
-                            <div class="value" id="boulder-today">966</div>
+                            <div class="value" id="boulder-today">1,010</div>
                         </div>
-                        <div class="boulder-item feeder">
+                        <div class="boulder-item feeder feeder-clickable" onclick="openModal('feeder-modal')">
                             <i class="fas fa-conveyor-belt"></i>
                             <div class="label">Feeder to Plant</div>
-                            <div class="value" id="boulder-feeder">1,232</div>
+                            <div class="value" id="boulder-feeder">1,157</div>
+                            <div class="trip-count" id="feeder-count">42 Trips</div>
                         </div>
                     </div>
 
-                    <!-- Production Today (inside same card) -->
-                    <h2 style="text-align:center; color:var(--orange); margin:24px 0 16px;"><i class="fas fa-cogs"></i> Production Today</h2>
-                    <div class="grid-4">
-                        <div class="item"><div class="item-label">10 mm</div><div class="item-value" id="p10">319</div></div>
-                        <div class="item"><div class="item-label">20 mm</div><div class="item-value" id="p20">346</div></div>
-                        <div class="item"><div class="item-label">River Sand</div><div class="item-value" id="psand">133</div></div>
-                        <div class="item"><div class="item-label">M Sand</div><div class="item-value" id="msand">165</div></div>
-                        <div class="item"><div class="item-label">Silt </div><div class="item-value" id="msand">45</div></div>
+                    <!-- Dispatch Grid (without the title) -->
+                    <div class="dispatch-grid">
+                        <div class="dispatch-item">
+                            <div class="label">10 mm</div>
+                            <div class="value" id="d10">245</div>
+                        </div>
+                        <div class="dispatch-item">
+                            <div class="label">20 mm</div>
+                            <div class="value" id="d20">280</div>
+                        </div>
+                        <div class="dispatch-item">
+                            <div class="label">Rivo Sand </div>
+                            <div class="value" id="dsand">95</div>
+                        </div>
+                        <div class="dispatch-item">
+                            <div class="label">M Sand</div>
+                            <div class="value" id="dmsand">120</div>
+                        </div>
+                    </div>
+                    
+                    <!-- IMPROVED Dispatch Vehicles Button -->
+                    <div class="dispatch-vehicles" onclick="openModal('dispatch-vehicles-modal')">
+                        <div class="label">
+                            <i class="fas fa-truck"></i> Total Vehicles Dispatched
+                        </div>
+                        <div class="value" id="dispatch-vehicles">15</div>
                     </div>
                 </div>
-                <!-- You can add more cards below if needed -->
             </div>
 
-            <!-- Right Column -->
-            <div class="right-stack">
-                <div class="card dispatch-card">
-                    <h2><i class="fas fa-truck-moving"></i> Dispatch Today</h2>
-                    <div class="grid-4">
-                        <div class="dispatch-item"><div class="item-label">10 mm</div><div class="item-value" id="d10">245</div></div>
-                        <div class="dispatch-item"><div class="item-label">20 mm</div><div class="item-value" id="d20">280</div></div>
-                        <div class="dispatch-item"><div class="item-label">River Sand</div><div class="item-value" id="dsand">95</div></div>
-                        <div class="dispatch-item"><div class="item-label">M Sand</div><div class="item-value" id="dmsand">120</div></div>
-                    </div>
+            <!-- Right: Map -->
+            <div class="card map-container" onclick="openZoomModal('Live Operations Map', 'https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/Screenshot%202025-11-27%20081917.png')">
+                <div class="map-header">
+                    <i class="fas fa-map-marked-alt"></i> Live Operations Map
                 </div>
+                <div class="map-image">
+                    <img src="https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/Screenshot%202025-11-27%20081917.png" alt="Live Operations Map">
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="card stock-card">
-                    <h2><i class="fas fa-warehouse"></i> Current Stock</h2>
-                    <div class="grid-4">
-                        <div class="stock-item"><div class="item-label">10 mm</div><div class="item-value" id="s10">2,150</div></div>
-                        <div class="stock-item"><div class="item-label">20 mm</div><div class="item-value" id="s20">3,420</div></div>
-                        <div class="stock-item"><div class="item-label">River Sand</div><div class="item-value" id="ssand">1,650</div></div>
-                        <div class="stock-item"><div class="item-label">M Sand</div><div class="item-value" id="smsand">980</div></div>
+    <!-- Modal for Feeder to Plant with 3 images -->
+    <div id="feeder-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-conveyor-belt"></i> Feeder to Plant Details</h2>
+                <button class="close-btn" onclick="closeModal('feeder-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="image-gallery">
+                    <div class="gallery-item" onclick="openZoomModal('Live Summary', 'https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/WhatsApp%20Image%202025-11-27%20at%2010.58.37%20PM.jpeg')">
+                        <div class="gallery-header">Live Summary</div>
+                        <img src="https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/WhatsApp%20Image%202025-11-27%20at%2010.58.37%20PM.jpeg" alt="Live Summary" class="gallery-image">
+                        <div class="gallery-footer">Click to view in full size</div>
+                    </div>
+                    <div class="gallery-item" onclick="openZoomModal('Trip Wise Detail', 'https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/vehciletrip%20wise%20.jpg')">
+                        <div class="gallery-header">Trip Wise Detail</div>
+                        <img src="https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/vehciletrip%20wise%20.jpg" alt="Trip Wise Detail" class="gallery-image">
+                        <div class="gallery-footer">Click to view in full size</div>
+                    </div>
+                    <div class="gallery-item" onclick="openZoomModal('Time Difference Report', 'https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/WhatsApp%20Image%202025-11-27%20at%2011.05.37%20PM.jpeg')">
+                        <div class="gallery-header">Time Difference Report</div>
+                        <img src="https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/WhatsApp%20Image%202025-11-27%20at%2011.05.37%20PM.jpeg" alt="Time Difference Report" class="gallery-image">
+                        <div class="gallery-footer">Click to view in full size</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal for Tippers Available - NOW SHOWS LARGE IMAGE DIRECTLY -->
+    <div id="tipper-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-truck"></i> Tippers Available Details</h2>
+                <button class="close-btn" onclick="closeModal('tipper-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="zoom-modal-body">
+                    <div class="report-title">Tippers Available Report</div>
+                    <img src="https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/WhatsApp%20Image%202025-11-27%20at%2010.19.28%20AM.jpeg" alt="Tippers Available Report" style="max-width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Dispatch Vehicles with 2 images -->
+    <div id="dispatch-vehicles-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-truck"></i> Dispatch Vehicles Details</h2>
+                <button class="close-btn" onclick="closeModal('dispatch-vehicles-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="image-gallery-2">
+                    <div class="gallery-item" onclick="openZoomModal('Vehicle Dispatch Report 1', 'https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/WhatsApp%20Image%202025-11-25%20at%209.54.26%20AM.jpeg')">
+                        <div class="gallery-header">Vehicle Dispatch Report 1</div>
+                        <img src="https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/WhatsApp%20Image%202025-11-25%20at%209.54.26%20AM.jpeg" alt="Vehicle Dispatch Report 1" class="gallery-image">
+                        <div class="gallery-footer">Click to view in full size</div>
+                    </div>
+                    <div class="gallery-item" onclick="openZoomModal('Vehicle Dispatch Report 2', 'https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/Dispatch%20Vehicle%20wise%20web.png')">
+                        <div class="gallery-header">Vehicle Dispatch Report 2</div>
+                        <img src="https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/Dispatch%20Vehicle%20wise%20web.png" alt="Vehicle Dispatch Report 2" class="gallery-image">
+                        <div class="gallery-footer">Click to view in full size</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Modal for FTD/MTD MIS with side-by-side reports -->
+    <div id="ftd-mtd-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-chart-line"></i> FTD / MTD MIS Reports</h2>
+                <button class="close-btn" onclick="closeModal('ftd-mtd-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="reports-container">
+                    <div class="report-card" onclick="openZoomModal('FTD/MTD Report', 'https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/WhatsApp%20Image%202025-11-21%20at%2010.03.10%20AM.jpeg')">
+                        <div class="report-header">FTD/MTD Report</div>
+                        <img src="https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/WhatsApp%20Image%202025-11-21%20at%2010.03.10%20AM.jpeg" alt="FTD/MTD Report" class="report-image">
+                        <div class="report-footer">Click to view in full size</div>
+                    </div>
+                    <div class="report-card" onclick="openZoomModal('Target Wise Report', 'https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/WhatsApp%20Image%202025-11-27%20at%208.55.11%20PM.jpeg')">
+                        <div class="report-header">Target Wise Report</div>
+                        <img src="https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/WhatsApp%20Image%202025-11-27%20at%208.55.11%20PM.jpeg" alt="Target Wise Report" class="report-image">
+                        <div class="report-footer">Click to view in full size</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPDATED: Modal for Compressor Report with Mine Boulder Production Dashboard -->
+    <div id="compressor-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-compress-arrows-alt"></i> Mine Boulder Production Dashboard</h2>
+                <button class="close-btn" onclick="closeModal('compressor-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="production-table-container">
+                    <div class="section-header">
+                        <h2 class="section-title">Production Details</h2>
+                        <div class="target-badge">
+                            <span>Target: 1000 Holes/Day</span>
+                        </div>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>FTD</th>
+                                <th>MTD</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="highlight">
+                                <td>Blasting Pattern</td>
+                                <td colspan="2">Staggered Pattern</td>
+                            </tr>
+                            <tr>
+                                <td>No of Compressors</td>
+                                <td>69</td>
+                                <td>252</td>
+                            </tr>
+                            <tr>
+                                <td>No of Holes</td>
+                                <td>974</td>
+                                <td>3,874</td>
+                            </tr>
+                            <tr>
+                                <td>Total Feetage</td>
+                                <td>5,299</td>
+                                <td>10,299</td>
+                            </tr>
+                            <tr class="highlight">
+                                <td>Trial Boulder Recovery %</td>
+                                <td colspan="2">80%</td>
+                            </tr>
+                            <tr>
+                                <td>Breaking %</td>
+                                <td colspan="2">23.5%</td>
+                            </tr>
+                            <tr>
+                                <td>No of NMR</td>
+                                <td>69</td>
+                                <td>252</td>
+                            </tr>
+                            <tr class="highlight">
+                                <td>Achievement %</td>
+                                <td class="achievement-high">97%</td>
+                                <td class="achievement-high">387%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Zoom Modal for Reports -->
+    <div id="zoom-modal" class="modal">
+        <div class="modal-content zoom-modal-content">
+            <div class="modal-header">
+                <h2 id="zoom-modal-title">Report</h2>
+                <button class="close-btn" onclick="closeModal('zoom-modal')">&times;</button>
+            </div>
+            <div class="zoom-modal-body">
+                <div class="report-title" id="zoom-report-title">FTD/MTD Report</div>
+                <img id="zoom-report-image" src="" alt="Report">
+            </div>
+        </div>
+    </div>
+
     <script>
         function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-
         function update() {
             // Machines
-            document.getElementById('comp').textContent = 10 + rand(0,3);
+            const compValue = 10 + rand(0,3);
+            document.getElementById('comp').textContent = compValue;
             document.getElementById('tipper').textContent = `${8+rand(0,4)}/12`;
             document.getElementById('exc').textContent = `${4+rand(0,1)}/5`;
             document.getElementById('load').textContent = `2/2`;
 
             // Boulder Operations
-            document.getElementById('trips').textContent = 25 + rand(0, 25);
-            document.getElementById('boulder-today').textContent = 950 + rand(0, 120);
-            document.getElementById('boulder-feeder').textContent = (1150 + rand(0, 100)).toLocaleString();
+            const trips = 30 + rand(0, 30);
+            document.getElementById('trips').textContent = trips;
+            
+            const tonnage = 950 + rand(0, 150);
+            document.getElementById('boulder-today').textContent = tonnage;
+            
+            const feeder = 1100 + rand(0, 150);
+            document.getElementById('boulder-feeder').textContent = feeder.toLocaleString();
+            document.getElementById('feeder-count').textContent = `${Math.floor(feeder/30)} Trips`;
 
-            // Production Today
-            document.getElementById('p10').textContent = 290 + rand(0, 50);
-            document.getElementById('p20').textContent = 320 + rand(0, 50);
-            document.getElementById('psand').textContent = 110 + rand(0, 40);
-            document.getElementById('msand').textContent = 140 + rand(0, 40);
-
-            // Dispatch & Stock
-            document.getElementById('d10').textContent = 230 + rand(0,40);
-            document.getElementById('d20').textContent = 260 + rand(0,50);
-            document.getElementById('dsand').textContent = 85 + rand(0,30);
-            document.getElementById('dmsand').textContent = 110 + rand(0,35);
-            document.getElementById('s10').textContent = (2100 + rand(-80,150)).toLocaleString();
-            document.getElementById('s20').textContent = (3350 + rand(-100,200)).toLocaleString();
-            document.getElementById('ssand').textContent = (1600 + rand(-80,150)).toLocaleString();
-            document.getElementById('smsand').textContent = (950 + rand(-70,150)).toLocaleString();
+            // Dispatch
+            document.getElementById('d10').textContent = 220 + rand(0,50);
+            document.getElementById('d20').textContent = 260 + rand(0,60);
+            document.getElementById('dsand').textContent = 80 + rand(0,40);
+            document.getElementById('dmsand').textContent = 100 + rand(0,50);
+            
+            // Dispatch Vehicles
+            document.getElementById('dispatch-vehicles').textContent = 12 + rand(0, 8);
         }
-
+        
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // NEW: Open zoom modal for reports
+        function openZoomModal(title, imageSrc) {
+            document.getElementById('zoom-modal-title').textContent = title;
+            document.getElementById('zoom-report-title').textContent = title;
+            document.getElementById('zoom-report-image').src = imageSrc;
+            document.getElementById('zoom-report-image').alt = title;
+            openModal('zoom-modal');
+        }
+        
+        // Close modal when clicking outside the modal content
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    modals[i].style.display = 'none';
+                }
+            }
+        }
+        
+        // Simple animation for table rows on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('#compressor-modal tbody tr');
+            
+            rows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(-20px)';
+                
+                setTimeout(() => {
+                    row.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateX(0)';
+                }, index * 100);
+            });
+        });
+        
         setInterval(update, 5000);
         update();
     </script>
