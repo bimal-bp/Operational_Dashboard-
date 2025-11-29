@@ -1184,151 +1184,447 @@
     </div>
 
     <!-- NEW: Modal for Production & Stock -->
-    <div id="production-stock-modal" class="modal production-stock-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-industry"></i> Production & Stock Details</h2>
-                <button class="close-btn" onclick="closeModal('production-stock-modal')">&times;</button>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Operations Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Previous CSS styles remain the same until the Production & Stock Section */
+        
+        /* UPDATED: Production & Stock Section Styles */
+        .production-stock-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 18px;
+        }
+        
+        .plant-details {
+            display: grid;
+            grid-template-rows: auto auto;
+            gap: 18px;
+        }
+        
+        .plant-report {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .plant-report-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+        
+        .plant-report-table th, .plant-report-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .plant-report-table th {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .plant-report-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .plant-report-table tr:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+        
+        .plant-report-table .highlight {
+            background-color: rgba(59, 130, 246, 0.1);
+            font-weight: 600;
+        }
+        
+        .cctv-container {
+            border-radius: 12px;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+        }
+        
+        .cctv-header {
+            background: linear-gradient(90deg, #1e293b, #334155);
+            color: white;
+            padding: 16px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .cctv-image {
+            flex: 1;
+            background-color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .cctv-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .cctv-container:hover .cctv-image img {
+            transform: scale(1.02);
+        }
+        
+        .production-stock-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .production-details, .stock-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .production-table, .stock-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+        
+        .production-table th, .production-table td,
+        .stock-table th, .stock-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .production-table th, .stock-table th {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .production-table tr:last-child td, .stock-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .production-table tr:hover, .stock-table tr:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+        
+        .production-table .total-row, .stock-table .total-row {
+            background-color: rgba(16, 185, 129, 0.1);
+            font-weight: 700;
+        }
+        
+        .production-table .total-row td, .stock-table .total-row td {
+            font-weight: 700;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .production-stock-section { grid-template-columns: 1fr; }
+        }
+        
+        @media (max-width: 900px) {
+            .production-stock-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="title-bar">
+        <i class="fas fa-tachometer-alt"></i> Live Operations Dashboard
+    </div>
+    <div class="container">
+        <!-- Machines section remains the same -->
+        <div class="machines">
+            <!-- ... existing machine cards ... -->
+        </div>
+
+        <!-- UPDATED: Production & Stock Section -->
+        <div class="card production-stock-section">
+            <div class="plant-details">
+                <div class="card">
+                    <h2 class="section-title"><i class="fas fa-industry"></i> Plant Report</h2>
+                    <div class="plant-report">
+                        <table class="plant-report-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>FTD</th>
+                                    <th>Month</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Production Hrs.</td>
+                                    <td>10.7</td>
+                                    <td>111.1</td>
+                                </tr>
+                                <tr>
+                                    <td>Maintenance Hrs.</td>
+                                    <td>2.5</td>
+                                    <td>38.5</td>
+                                </tr>
+                                <tr>
+                                    <td>No Feed Hrs.</td>
+                                    <td>1.6</td>
+                                    <td>24.4</td>
+                                </tr>
+                                <tr>
+                                    <td>Breakdown Hrs.</td>
+                                    <td>0</td>
+                                    <td>3.8</td>
+                                </tr>
+                                <tr>
+                                    <td>Power Cut Hrs.</td>
+                                    <td>5.9</td>
+                                    <td>76.8</td>
+                                </tr>
+                                <tr>
+                                    <td>Boulder Jam Hrs.</td>
+                                    <td>0.8</td>
+                                    <td>14.1</td>
+                                </tr>
+                                <tr>
+                                    <td>Others Hrs.</td>
+                                    <td>2.5</td>
+                                    <td>67.3</td>
+                                </tr>
+                                <tr class="highlight">
+                                    <td>Total Hrs.</td>
+                                    <td>24</td>
+                                    <td>336</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card cctv-container">
+                    <div class="cctv-header">
+                        <i class="fas fa-video"></i> Plant CCTV Footage
+                    </div>
+                    <div class="cctv-image">
+                        <img src="https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/Screenshot%202025-11-27%20081917.png" alt="Plant CCTV Footage">
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <div class="section-header">
-                    <h2 class="section-title">Current Production & Stock Status</h2>
-                </div>
-                
+            <div class="card">
+                <h2 class="section-title"><i class="fas fa-boxes"></i> Production & Stock Details</h2>
                 <div class="production-stock-grid">
-                    <div class="stock-card">
-                        <div class="stock-header">
-                            <i class="fas fa-cubes"></i>
-                            <h3>10 mm Aggregate</h3>
-                        </div>
-                        <div class="stock-value">245 MT</div>
-                        <div class="stock-details">
-                            <div class="stock-detail-item">
-                                <div class="stock-detail-label">Production</div>
-                                <div class="stock-detail-value">280 MT</div>
-                            </div>
-                            <div class="stock-detail-item">
-                                <div class="stock-detail-label">Dispatch</div>
-                                <div class="stock-detail-value">245 MT</div>
-                            </div>
-                        </div>
-                        <div class="stock-trend trend-up">
-                            <i class="fas fa-arrow-up"></i> 12% increase from yesterday
-                        </div>
+                    <div class="production-details">
+                        <h3 style="color: var(--success); margin-bottom: 10px; text-align: center;">Today's Production</h3>
+                        <table class="production-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>FTD</th>
+                                    <th>MTD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>10 MM</td>
+                                    <td>381.6</td>
+                                    <td>3722.4</td>
+                                </tr>
+                                <tr>
+                                    <td>20 MM</td>
+                                    <td>593.6</td>
+                                    <td>5790.4</td>
+                                </tr>
+                                <tr>
+                                    <td>V-Sand</td>
+                                    <td>296.8</td>
+                                    <td>2895.2</td>
+                                </tr>
+                                <tr>
+                                    <td>Railway Ballast</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>40 MM</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Rivo Sand</td>
+                                    <td>763.2</td>
+                                    <td>7444.8</td>
+                                </tr>
+                                <tr>
+                                    <td>Slurry</td>
+                                    <td>84.8</td>
+                                    <td>827.2</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td>Total</td>
+                                    <td>2120</td>
+                                    <td>20680</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    
-                    <div class="stock-card">
-                        <div class="stock-header">
-                            <i class="fas fa-cubes"></i>
-                            <h3>20 mm Aggregate</h3>
-                        </div>
-                        <div class="stock-value">280 MT</div>
-                        <div class="stock-details">
-                            <div class="stock-detail-item">
-                                <div class="stock-detail-label">Production</div>
-                                <div class="stock-detail-value">320 MT</div>
-                            </div>
-                            <div class="stock-detail-item">
-                                <div class="stock-detail-label">Dispatch</div>
-                                <div class="stock-detail-value">280 MT</div>
-                            </div>
-                        </div>
-                        <div class="stock-trend trend-up">
-                            <i class="fas fa-arrow-up"></i> 8% increase from yesterday
-                        </div>
-                    </div>
-                    
-                    <div class="stock-card">
-                        <div class="stock-header">
-                            <i class="fas fa-cubes"></i>
-                            <h3>Rivo Sand</h3>
-                        </div>
-                        <div class="stock-value">95 MT</div>
-                        <div class="stock-details">
-                            <div class="stock-detail-item">
-                                <div class="stock-detail-label">Production</div>
-                                <div class="stock-detail-value">110 MT</div>
-                            </div>
-                            <div class="stock-detail-item">
-                                <div class="stock-detail-label">Dispatch</div>
-                                <div class="stock-detail-value">95 MT</div>
-                            </div>
-                        </div>
-                        <div class="stock-trend trend-down">
-                            <i class="fas fa-arrow-down"></i> 5% decrease from yesterday
-                        </div>
-                    </div>
-                    
-                    <div class="stock-card">
-                        <div class="stock-header">
-                            <i class="fas fa-cubes"></i>
-                            <h3>M Sand</h3>
-                        </div>
-                        <div class="stock-value">120 MT</div>
-                        <div class="stock-details">
-                            <div class="stock-detail-item">
-                                <div class="stock-detail-label">Production</div>
-                                <div class="stock-detail-value">140 MT</div>
-                            </div>
-                            <div class="stock-detail-item">
-                                <div class="stock-detail-label">Dispatch</div>
-                                <div class="stock-detail-value">120 MT</div>
-                            </div>
-                        </div>
-                        <div class="stock-trend trend-up">
-                            <i class="fas fa-arrow-up"></i> 15% increase from yesterday
-                        </div>
+                    <div class="stock-details">
+                        <h3 style="color: var(--warning); margin-bottom: 10px; text-align: center;">Godown Stock</h3>
+                        <table class="stock-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>10 MM</td>
+                                    <td>80</td>
+                                </tr>
+                                <tr>
+                                    <td>20 MM</td>
+                                    <td>4100</td>
+                                </tr>
+                                <tr>
+                                    <td>Rivo Sand</td>
+                                    <td>20990</td>
+                                </tr>
+                                <tr>
+                                    <td>Railway Ballast</td>
+                                    <td>795</td>
+                                </tr>
+                                <tr>
+                                    <td>40 MM</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>VSI</td>
+                                    <td>18816</td>
+                                </tr>
+                                <tr>
+                                    <td>GSB</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td>Total</td>
+                                    <td>44781</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                
-                <div class="section-header" style="margin-top: 30px;">
-                    <h2 class="section-title">Production Summary</h2>
-                </div>
-                
-                <table class="modal-table">
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Today's Production</th>
-                            <th>Today's Dispatch</th>
-                            <th>Current Stock</th>
-                            <th>Trend</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>10 mm Aggregate</td>
-                            <td>280 MT</td>
-                            <td>245 MT</td>
-                            <td>245 MT</td>
-                            <td class="trend-up">↑ 12%</td>
-                        </tr>
-                        <tr>
-                            <td>20 mm Aggregate</td>
-                            <td>320 MT</td>
-                            <td>280 MT</td>
-                            <td>280 MT</td>
-                            <td class="trend-up">↑ 8%</td>
-                        </tr>
-                        <tr>
-                            <td>Rivo Sand</td>
-                            <td>110 MT</td>
-                            <td>95 MT</td>
-                            <td>95 MT</td>
-                            <td class="trend-down">↓ 5%</td>
-                        </tr>
-                        <tr>
-                            <td>M Sand</td>
-                            <td>140 MT</td>
-                            <td>120 MT</td>
-                            <td>120 MT</td>
-                            <td class="trend-up">↑ 15%</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
+
+        <!-- Main Content remains the same -->
+        <div class="main-area">
+            <!-- ... existing content ... -->
+        </div>
     </div>
+
+    <!-- All modals remain the same -->
+    
+    <script>
+        // JavaScript remains the same except for removing the production & stock update code
+        function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        function update() {
+            // Machines
+            const compValue = 10 + rand(0,3);
+            document.getElementById('comp').textContent = compValue;
+            document.getElementById('tipper').textContent = `${8+rand(0,4)}/12`;
+            document.getElementById('exc').textContent = `${4+rand(0,1)}/5`;
+            document.getElementById('load').textContent = `2/2`;
+
+            // Boulder Operations
+            const trips = 30 + rand(0, 30);
+            document.getElementById('trips').textContent = trips;
+            
+            const tonnage = 950 + rand(0, 150);
+            document.getElementById('boulder-today').textContent = tonnage;
+            
+            const feeder = 1100 + rand(0, 150);
+            document.getElementById('boulder-feeder').textContent = feeder.toLocaleString();
+            document.getElementById('feeder-count').textContent = `${Math.floor(feeder/30)} Trips`;
+
+            // Dispatch
+            document.getElementById('d10').textContent = 220 + rand(0,50);
+            document.getElementById('d20').textContent = 260 + rand(0,60);
+            document.getElementById('dsand').textContent = 80 + rand(0,40);
+            document.getElementById('dmsand').textContent = 100 + rand(0,50);
+            
+            // Dispatch Vehicles
+            document.getElementById('dispatch-vehicles').textContent = 12 + rand(0, 8);
+        }
+        
+        // Modal functions remain the same
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        function openZoomModal(title, imageSrc) {
+            document.getElementById('zoom-modal-title').textContent = title;
+            document.getElementById('zoom-report-title').textContent = title;
+            document.getElementById('zoom-report-image').src = imageSrc;
+            document.getElementById('zoom-report-image').alt = title;
+            openModal('zoom-modal');
+        }
+        
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    modals[i].style.display = 'none';
+                }
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('#compressor-modal tbody tr');
+            
+            rows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(-20px)';
+                
+                setTimeout(() => {
+                    row.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateX(0)';
+                }, index * 100);
+            });
+        });
+        
+        setInterval(update, 5000);
+        update();
+    </script>
+</body>
+</html>
 
     <!-- NEW: Zoom Modal for Reports -->
     <div id="zoom-modal" class="modal">
