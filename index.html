@@ -242,6 +242,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 18px;
             height: 100%;
+            min-height: 600px;
         }
         .left-stack {
             display: grid;
@@ -528,7 +529,7 @@
             100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
         }
 
-        /* Map Section */
+        /* Map Section - UPDATED for right column */
         .map-container {
             border-radius: 12px;
             overflow: hidden;
@@ -537,6 +538,9 @@
             flex-direction: column;
             cursor: pointer;
             border: 1px solid var(--border);
+            grid-column: 2;
+            grid-row: 1;
+            align-self: start;
         }
         .map-header {
             background: linear-gradient(90deg, #1e293b, #334155);
@@ -554,6 +558,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            min-height: 400px;
         }
         .map-image img {
             width: 100%;
@@ -591,6 +596,31 @@
         .modal-btn:hover {
             background: rgba(0, 0, 0, 0.9);
             transform: scale(1.1);
+        }
+        
+        /* Fullscreen button for main window */
+        .fullscreen-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.3rem;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+        .fullscreen-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
         }
 
         /* Modal Styles */
@@ -1086,6 +1116,55 @@
         .responsibility-table .status-absent {
             background-color: var(--danger);
         }
+        
+        /* NEW: Quarry Team Attendance in Compressor Box */
+        .quarry-attendance {
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(239, 68, 68, 0.05);
+            border-radius: 6px;
+            border: 1px solid rgba(239, 68, 68, 0.1);
+        }
+        
+        .quarry-attendance h4 {
+            font-size: 0.8rem;
+            color: var(--danger);
+            margin-bottom: 5px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .quarty-attendance-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            margin-bottom: 3px;
+        }
+        
+        .quarty-attendance-row .label {
+            color: var(--text-light);
+        }
+        
+        .quarty-attendance-row .value {
+            color: var(--text);
+            font-weight: 600;
+        }
+        
+        .quarty-attendance-row .present {
+            color: var(--success);
+        }
+        
+        .quarty-attendance-row .absent {
+            color: var(--danger);
+        }
+        
+        .quarry-members {
+            margin-top: 8px;
+            font-size: 0.7rem;
+            color: var(--text-light);
+            text-align: center;
+            line-height: 1.3;
+        }
 
         /* Production & Stock Modal Styles */
         .production-stock-modal .modal-body {
@@ -1276,7 +1355,11 @@
         /* Responsive */
         @media (max-width: 1400px) {
             .main-area { grid-template-columns: 1fr; }
-            .map-container { height: 500px; }
+            .map-container { 
+                height: 500px; 
+                grid-column: 1;
+                grid-row: 2;
+            }
             .production-stock-section { grid-template-columns: 1fr; }
         }
         
@@ -1354,10 +1437,24 @@
             .responsibility-table th, .responsibility-table td {
                 padding: 8px 10px;
             }
+            .quarry-attendance {
+                padding: 6px;
+            }
+            .quarry-attendance h4 {
+                font-size: 0.7rem;
+            }
+            .quarty-attendance-row {
+                font-size: 0.65rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Fullscreen Button -->
+    <button class="fullscreen-btn" id="fullscreen-btn" title="Toggle Fullscreen Mode">
+        <i class="fas fa-expand"></i>
+    </button>
+    
     <div class="title-bar">
         <i class="fas fa-tachometer-alt"></i> Live Operations Dashboard
         <div class="date-display" id="current-date"></div>
@@ -1365,20 +1462,48 @@
     <div class="container">
         <!-- Machines -->
         <div class="machines">
-            <!-- Compressors Running box with additional details -->
+            <!-- Compressors Running box with additional details and quarry team -->
             <div class="card mach-box comp comp-clickable" onclick="openModal('compressor-modal')">
                 <i class="fas fa-compress-arrows-alt mach-icon"></i>
                 <div class="mach-label">Compressors Running</div>
-                <div class="mach-value" id="comp">10</div>
+                <div class="mach-value" id="comp">12</div>
                 <div class="compressor-details">
-                    <div class="holes">546 holes</div>
-                    <div class="feets">3,015 feets</div>
+                    <div class="holes">558 holes</div>
+                    <div class="feets">3,120 feets</div>
+                </div>
+                
+                <!-- NEW: Quarry Team Attendance -->
+                <div class="quarry-attendance">
+                    <h4><i class="fas fa-users"></i> Quarry Team</h4>
+                    <div class="quarty-attendance-row">
+                        <span class="label">Operators Present:</span>
+                        <span class="value present" id="quarry-present">8/10</span>
+                    </div>
+                    <div class="quarty-attendance-row">
+                        <span class="label">Supervisors:</span>
+                        <span class="value present" id="quarry-supervisors">3/3</span>
+                    </div>
+                    <div class="quarry-members">Rajesh, Mohan, Sanjay, Vikram +5 more</div>
                 </div>
             </div>
             <div class="card mach-box tipper tipper-clickable" onclick="openModal('tipper-modal')">
                 <i class="fas fa-truck mach-icon"></i>
                 <div class="mach-label">Tippers Available</div>
                 <div class="mach-value" id="tipper">11/12</div>
+                
+                <!-- NEW: Tipper Team Attendance -->
+                <div class="quarry-attendance" style="background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.1);">
+                    <h4><i class="fas fa-truck"></i> Tipper Team</h4>
+                    <div class="quarty-attendance-row">
+                        <span class="label">Drivers Present:</span>
+                        <span class="value present" id="tipper-present">11/12</span>
+                    </div>
+                    <div class="quarty-attendance-row">
+                        <span class="label">Supervisors:</span>
+                        <span class="value present" id="tipper-supervisors">2/2</span>
+                    </div>
+                    <div class="quarry-members">Ramesh, Sunil, Anil, Praveen +8 more</div>
+                </div>
             </div>
             <div class="card mach-box exc-load">
                 <div class="combined-box">
@@ -1390,6 +1515,16 @@
                         <span class="combined-label">Loaders Running</span>
                         <span class="combined-value" id="load">2/2</span>
                     </div>
+                </div>
+                
+                <!-- Equipment Operators Attendance -->
+                <div class="quarry-attendance" style="background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.1); margin-top: 12px;">
+                    <h4><i class="fas fa-hard-hat"></i> Equipment Operators</h4>
+                    <div class="quarty-attendance-row">
+                        <span class="label">Present:</span>
+                        <span class="value present">6/7</span>
+                    </div>
+                    <div class="quarry-members">All equipment operational</div>
                 </div>
             </div>
             <div class="card mach-box ftd-mtd ftd-mtd-clickable" onclick="openModal('ftd-mtd-modal')">
@@ -1464,7 +1599,7 @@
                 </div>
             </div>
 
-            <!-- Right: Map -->
+            <!-- Right: Map - Updated to be in top-right corner -->
             <div class="card map-container" onclick="openZoomModal('Live Operations Map', 'https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/Screenshot%202025-11-27%20081917.png')">
                 <div class="map-header">
                     <i class="fas fa-map-marked-alt"></i> Live Operations Map
@@ -1509,7 +1644,7 @@
                     </div>
                 </div>
                 
-                <!-- NEW: Responsibility Section for Quarry -->
+                <!-- Responsibility Section for Quarry -->
                 <div class="responsibility-section">
                     <div class="responsibility-title">
                         <i class="fas fa-users"></i> Quarry Team - Today's Attendance & Work Update
@@ -1529,28 +1664,28 @@
                                 <td>Rajesh Kumar</td>
                                 <td>Quarry In-charge</td>
                                 <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Monitoring blast patterns, 546 holes completed</td>
+                                <td>Monitoring blast patterns, 558 holes completed</td>
                                 <td><button class="update-btn" onclick="updateWork('Rajesh Kumar')">Update</button></td>
                             </tr>
                             <tr>
                                 <td>Mohan Singh</td>
                                 <td>Excavator Operator</td>
                                 <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Operating Excavator #3, 210 tons excavated</td>
+                                <td>Operating Excavator #3, 245 tons excavated</td>
                                 <td><button class="update-btn" onclick="updateWork('Mohan Singh')">Update</button></td>
                             </tr>
                             <tr>
                                 <td>Sanjay Patel</td>
                                 <td>Compressor Operator</td>
                                 <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Running Compressor #5, 85 holes drilled</td>
+                                <td>Running Compressor #5, 95 holes drilled</td>
                                 <td><button class="update-btn" onclick="updateWork('Sanjay Patel')">Update</button></td>
                             </tr>
                             <tr>
                                 <td>Vikram Yadav</td>
                                 <td>Loader Operator</td>
-                                <td><span class="status-dot status-absent"></span> <span class="absent">Absent</span></td>
-                                <td>On leave today</td>
+                                <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
+                                <td>Operating Loader #2, feeding crusher</td>
                                 <td><button class="update-btn" onclick="updateWork('Vikram Yadav')">Update</button></td>
                             </tr>
                             <tr>
@@ -1580,7 +1715,7 @@
                     <img src="https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/WhatsApp%20Image%202025-11-27%20at%2010.19.28%20AM.jpeg" alt="Tippers Available Report" style="max-width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
                 </div>
                 
-                <!-- NEW: Responsibility Section for Tipper Team -->
+                <!-- Responsibility Section for Tipper Team -->
                 <div class="responsibility-section">
                     <div class="responsibility-title">
                         <i class="fas fa-truck"></i> Tipper Team - Today's Attendance & Work Update
@@ -1602,7 +1737,7 @@
                                 <td>Tipper Driver</td>
                                 <td>KA-05-AB-1234</td>
                                 <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Completed 8 trips, 240 tons transported</td>
+                                <td>Completed 9 trips, 270 tons transported</td>
                                 <td><button class="update-btn" onclick="updateWork('Ramesh Gupta')">Update</button></td>
                             </tr>
                             <tr>
@@ -1610,7 +1745,7 @@
                                 <td>Tipper Driver</td>
                                 <td>KA-05-CD-5678</td>
                                 <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Completed 7 trips, 210 tons transported</td>
+                                <td>Completed 8 trips, 240 tons transported</td>
                                 <td><button class="update-btn" onclick="updateWork('Sunil Kumar')">Update</button></td>
                             </tr>
                             <tr>
@@ -1618,7 +1753,7 @@
                                 <td>Tipper Driver</td>
                                 <td>KA-05-EF-9012</td>
                                 <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Completed 6 trips, 180 tons transported</td>
+                                <td>Completed 7 trips, 210 tons transported</td>
                                 <td><button class="update-btn" onclick="updateWork('Anil Singh')">Update</button></td>
                             </tr>
                             <tr>
@@ -1766,6 +1901,27 @@
                         </tbody>
                     </table>
                 </div>
+                
+                <!-- Quarry Team Summary -->
+                <div class="responsibility-section">
+                    <div class="responsibility-title">
+                        <i class="fas fa-users"></i> Quarry Team Summary - Today
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px;">
+                        <div style="background: linear-gradient(135deg, var(--danger-light), var(--danger)); padding: 15px; border-radius: 10px; color: white; text-align: center;">
+                            <div style="font-size: 0.9rem; opacity: 0.9;">Total Quarry Staff</div>
+                            <div style="font-size: 2rem; font-weight: 700;">23</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, var(--success-light), var(--success)); padding: 15px; border-radius: 10px; color: white; text-align: center;">
+                            <div style="font-size: 0.9rem; opacity: 0.9;">Present Today</div>
+                            <div style="font-size: 2rem; font-weight: 700;">22</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, var(--warning-light), var(--warning)); padding: 15px; border-radius: 10px; color: white; text-align: center;">
+                            <div style="font-size: 0.9rem; opacity: 0.9;">Absent Today</div>
+                            <div style="font-size: 2rem; font-weight: 700;">1</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1795,7 +1951,7 @@
                             </div>
                         </div>
                         
-                        <!-- NEW: Plant Team Responsibility Section -->
+                        <!-- Plant Team Responsibility Section -->
                         <div class="card">
                             <div class="responsibility-section">
                                 <div class="responsibility-title">
@@ -2192,7 +2348,7 @@
     <script>
         function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
         
-        // Fullscreen functionality
+        // Fullscreen functionality for modals
         function toggleFullscreen(modalId) {
             const modal = document.getElementById(modalId);
             const icon = document.getElementById('fullscreen-icon');
@@ -2210,6 +2366,29 @@
             }
         }
         
+        // Fullscreen functionality for entire dashboard
+        document.getElementById('fullscreen-btn').addEventListener('click', function() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+                this.innerHTML = '<i class="fas fa-compress"></i>';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    this.innerHTML = '<i class="fas fa-expand"></i>';
+                }
+            }
+        });
+        
+        // Update fullscreen button icon when exiting fullscreen
+        document.addEventListener('fullscreenchange', function() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                btn.innerHTML = '<i class="fas fa-expand"></i>';
+            }
+        });
+        
         // Close fullscreen with ESC key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
@@ -2224,21 +2403,36 @@
                         }
                     }
                 }
+                
+                // Also exit fullscreen for main window
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                    document.getElementById('fullscreen-btn').innerHTML = '<i class="fas fa-expand"></i>';
+                }
             }
         });
         
         function update() {
             // Machines - Updated with holes and feets
-            const compValue = 10 + rand(0,3);
+            const compValue = 12;
             document.getElementById('comp').textContent = compValue;
             
             // Update holes and feets values
-            const holes = 546 + rand(-20, 20);
-            const feets = 3015 + rand(-100, 100);
+            const holes = 558 + rand(-20, 20);
+            const feets = 3120 + rand(-100, 100);
             document.querySelector('.compressor-details .holes').textContent = `${holes} holes`;
             document.querySelector('.compressor-details .feets').textContent = `${feets.toLocaleString()} feets`;
             
+            // Update quarry team attendance
+            const quarryPresent = 7 + rand(0, 2);
+            document.getElementById('quarry-present').textContent = `${quarryPresent}/10`;
+            
             document.getElementById('tipper').textContent = `${8+rand(0,4)}/12`;
+            
+            // Update tipper team attendance
+            const tipperPresent = 10 + rand(0, 2);
+            document.getElementById('tipper-present').textContent = `${tipperPresent}/12`;
+            
             document.getElementById('exc').textContent = `${4+rand(0,1)}/5`;
             document.getElementById('load').textContent = `2/2`;
 
