@@ -237,11 +237,11 @@
             letter-spacing: 0.5px;
         }
 
-        /* Main Layout - Updated to position map in top-right */
+        /* Main Layout - Updated with new sizing */
         .main-area {
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            grid-template-rows: auto auto;
+            grid-template-columns: 1fr 1.3fr; /* Changed ratio for more space for map */
+            grid-template-rows: auto;
             gap: 18px;
             height: 100%;
             min-height: 600px;
@@ -251,10 +251,11 @@
             grid-template-rows: auto;
             gap: 18px;
             grid-column: 1;
-            grid-row: 1 / span 2;
+            grid-row: 1;
+            height: 100%;
         }
 
-        /* Updated Map positioning - Now in top-right corner */
+        /* Updated Map positioning - Increased by 30% */
         .map-container {
             border-radius: 12px;
             overflow: hidden;
@@ -266,7 +267,8 @@
             grid-column: 2;
             grid-row: 1;
             align-self: start;
-            height: 380px; /* Fixed height for top-right position */
+            height: 520px; /* Increased from 380px to 520px (approx 30% increase) */
+            width: 100%; /* Ensure full width of grid column */
         }
         .map-header {
             background: linear-gradient(90deg, #1e293b, #334155);
@@ -295,14 +297,17 @@
             transform: scale(1.02);
         }
 
-        /* Boulder + Dispatch Card */
+        /* Boulder + Dispatch Card - Reduced by 30% */
         .merged-ops-prod {
             border: 2px solid var(--orange) !important;
             border-radius: 14px;
             overflow: hidden;
-            padding: 24px;
+            padding: 20px; /* Reduced padding */
             background: linear-gradient(135deg, rgba(249, 115, 22, 0.05), rgba(249, 115, 22, 0.1));
             position: relative;
+            height: 520px; /* Set height to match map container */
+            display: flex;
+            flex-direction: column;
         }
         .merged-ops-prod::before {
             content: '';
@@ -314,10 +319,10 @@
             background: linear-gradient(90deg, var(--orange), var(--orange-light));
         }
         .section-title {
-            font-size: 1.65rem;
+            font-size: 1.4rem; /* Reduced from 1.65rem */
             font-weight: 700;
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 20px; /* Reduced from 28px */
             color: var(--orange);
             position: relative;
             display: inline-block;
@@ -336,11 +341,11 @@
         .boulder-row {
             display: grid;
             grid-template-columns: repeat(3,1fr);
-            gap: 20px;
-            margin-bottom: 32px;
+            gap: 15px; /* Reduced from 20px */
+            margin-bottom: 24px; /* Reduced from 32px */
         }
         .boulder-item {
-            padding: 24px 16px;
+            padding: 18px 12px; /* Reduced padding */
             text-align: center;
             background: rgba(255, 255, 255, 0.7);
             border: 1px solid rgba(254, 215, 170, 0.5);
@@ -365,8 +370,8 @@
             background: white;
         }
         .boulder-item i { 
-            font-size: 2.4rem; 
-            margin-bottom: 12px; 
+            font-size: 2rem; /* Reduced from 2.4rem */
+            margin-bottom: 10px; /* Reduced from 12px */
             opacity: 0.9; 
             background: linear-gradient(135deg, currentColor, rgba(59, 130, 246, 0.7));
             -webkit-background-clip: text;
@@ -376,27 +381,27 @@
         .tonnage i { color: var(--orange); }
         .feeder i { color: var(--danger); }
         .boulder-item .label { 
-            font-size: 1rem; 
+            font-size: 0.9rem; /* Reduced from 1rem */
             color: var(--text-light); 
             font-weight: 600; 
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         .boulder-item .value { 
-            font-size: 2.4rem; 
+            font-size: 2rem; /* Reduced from 2.4rem */
             font-weight: 800; 
-            margin-top: 8px; 
+            margin-top: 6px; /* Reduced from 8px */
             background: linear-gradient(135deg, var(--text), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .boulder-item .trip-count {
-            font-size: 1rem;
+            font-size: 0.9rem; /* Reduced from 1rem */
             font-weight: 600;
-            margin-top: 8px;
+            margin-top: 6px; /* Reduced from 8px */
             color: var(--primary);
             background: rgba(59, 130, 246, 0.1);
-            padding: 4px 12px;
+            padding: 4px 10px; /* Reduced padding */
             border-radius: 20px;
             display: inline-block;
         }
@@ -405,10 +410,11 @@
         .dispatch-grid {
             display: grid;
             grid-template-columns: repeat(4,1fr);
-            gap: 20px;
+            gap: 15px; /* Reduced from 20px */
+            margin-bottom: 20px; /* Added margin */
         }
         .dispatch-item {
-            padding: 24px 16px;
+            padding: 18px 12px; /* Reduced padding */
             text-align: center;
             background: rgba(254, 252, 232, 0.3);
             border: 1px solid rgba(253, 230, 138, 0.5);
@@ -433,16 +439,16 @@
             background: white;
         }
         .dispatch-item .label { 
-            font-size: 1rem; 
+            font-size: 0.9rem; /* Reduced from 1rem */
             color: var(--warning); 
             font-weight: 600; 
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         .dispatch-item .value { 
-            font-size: 2.2rem; 
+            font-size: 1.8rem; /* Reduced from 2.2rem */
             font-weight: 700; 
-            margin-top: 8px; 
+            margin-top: 6px; /* Reduced from 8px */
             color: var(--warning);
             background: linear-gradient(135deg, var(--warning), var(--warning-light));
             -webkit-background-clip: text;
@@ -451,8 +457,8 @@
         
         /* Dispatch Vehicles */
         .dispatch-vehicles {
-            margin-top: 30px;
-            padding: 24px 16px;
+            margin-top: 15px; /* Reduced from 30px */
+            padding: 20px 12px; /* Reduced padding */
             background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
             border: none;
             border-radius: 12px;
@@ -486,27 +492,27 @@
             background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
         }
         .dispatch-vehicles .label {
-            font-size: 1.3rem;
+            font-size: 1.1rem; /* Reduced from 1.3rem */
             color: white;
             font-weight: 600;
             margin-bottom: 0;
         }
         .dispatch-vehicles .value {
-            font-size: 2.5rem;
+            font-size: 2rem; /* Reduced from 2.5rem */
             font-weight: 800;
             color: white;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         .dispatch-vehicles i {
-            font-size: 2.2rem;
+            font-size: 1.8rem; /* Reduced from 2.2rem */
             color: white;
             opacity: 0.9;
         }
 
         /* Production & Stock Button */
         .production-stock {
-            margin-top: 20px;
-            padding: 24px 16px;
+            margin-top: 15px; /* Reduced from 20px */
+            padding: 20px 12px; /* Reduced padding */
             background: linear-gradient(135deg, #10b981 0%, #047857 100%);
             border: none;
             border-radius: 12px;
@@ -540,19 +546,19 @@
             background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
         }
         .production-stock .label {
-            font-size: 1.3rem;
+            font-size: 1.1rem; /* Reduced from 1.3rem */
             color: white;
             font-weight: 600;
             margin-bottom: 0;
         }
         .production-stock .value {
-            font-size: 2.5rem;
+            font-size: 2rem; /* Reduced from 2.5rem */
             font-weight: 800;
             color: white;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         .production-stock i {
-            font-size: 2.2rem;
+            font-size: 1.8rem; /* Reduced from 2.2rem */
             color: white;
             opacity: 0.9;
         }
@@ -1219,6 +1225,71 @@
         .equipment-table tr:hover {
             background-color: rgba(0,0,0,0.02);
         }
+        
+        /* Compressor Modal Table Styles */
+        .production-table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        .production-table-container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+        
+        .production-table-container th {
+            background: linear-gradient(135deg, var(--danger), var(--danger-light));
+            color: white;
+            font-weight: 600;
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .production-table-container td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .production-table-container tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .production-table-container tr.highlight {
+            background-color: rgba(239, 68, 68, 0.05);
+        }
+        
+        .production-table-container tr:hover {
+            background-color: rgba(0,0,0,0.02);
+        }
+        
+        .production-table-container .achievement-high {
+            color: var(--success);
+            font-weight: 700;
+        }
+        
+        .production-table-container .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .production-table-container .target-badge {
+            background: linear-gradient(135deg, var(--danger), var(--danger-light));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
 
         /* Responsive */
         @media (max-width: 1400px) {
@@ -1227,6 +1298,9 @@
                 height: 400px; 
                 grid-column: 1;
                 grid-row: 2;
+            }
+            .merged-ops-prod {
+                height: auto;
             }
             .production-stock-section { grid-template-columns: 1fr; }
         }
@@ -1348,7 +1422,7 @@
 
         <!-- Main Content -->
         <div class="main-area">
-            <!-- Left: Boulder Ops + Dispatch -->
+            <!-- Left: Boulder Ops + Dispatch - Reduced by 30% -->
             <div class="left-stack">
                 <div class="card merged-ops-prod">
                     <h2 class="section-title"><i class="fas fa-mountain"></i> Boulder Operations & Dispatch Update </h2>
@@ -1411,7 +1485,7 @@
                 </div>
             </div>
 
-            <!-- Right: Map - Now in top-right corner -->
+            <!-- Right: Map - Increased by 30% -->
             <div class="card map-container" onclick="openZoomModal('Live Operations Map', 'https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/Screenshot%202025-11-27%20081917.png')">
                 <div class="map-header">
                     <i class="fas fa-map-marked-alt"></i> Live Operations Map
