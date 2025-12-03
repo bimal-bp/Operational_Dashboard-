@@ -157,7 +157,7 @@
             font-weight: 600;
         }
         
-        /* Combined Excavator/Loader Box */
+        /* Combined Excavator/Loader Box - Now clickable */
         .combined-box {
             display: flex;
             flex-direction: column;
@@ -173,6 +173,7 @@
             border-radius: 8px;
             border-left: 4px solid var(--warning);
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         .combined-item:hover {
             background: rgba(245, 158, 11, 0.2);
@@ -236,10 +237,11 @@
             letter-spacing: 0.5px;
         }
 
-        /* Main Layout */
+        /* Main Layout - Updated to position map in top-right */
         .main-area {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: auto auto;
             gap: 18px;
             height: 100%;
             min-height: 600px;
@@ -248,6 +250,49 @@
             display: grid;
             grid-template-rows: auto;
             gap: 18px;
+            grid-column: 1;
+            grid-row: 1 / span 2;
+        }
+
+        /* Updated Map positioning - Now in top-right corner */
+        .map-container {
+            border-radius: 12px;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            grid-column: 2;
+            grid-row: 1;
+            align-self: start;
+            height: 380px; /* Fixed height for top-right position */
+        }
+        .map-header {
+            background: linear-gradient(90deg, #1e293b, #334155);
+            color: white;
+            padding: 16px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+        }
+        .map-image {
+            flex: 1;
+            background-color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .map-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        .map-container:hover .map-image img {
+            transform: scale(1.02);
         }
 
         /* Boulder + Dispatch Card */
@@ -513,12 +558,12 @@
         }
 
         /* Clickable Items */
-        .feeder-clickable, .ftd-mtd-clickable, .tipper-clickable, .comp-clickable {
+        .feeder-clickable, .ftd-mtd-clickable, .tipper-clickable, .comp-clickable, .exc-load-clickable {
             cursor: pointer;
             border: 2px solid var(--primary) !important;
             animation: pulse 2s infinite;
         }
-        .feeder-clickable:hover, .ftd-mtd-clickable:hover, .tipper-clickable:hover, .comp-clickable:hover {
+        .feeder-clickable:hover, .ftd-mtd-clickable:hover, .tipper-clickable:hover, .comp-clickable:hover, .exc-load-clickable:hover {
             border-color: var(--primary-light) !important;
             transform: translateY(-4px);
             box-shadow: var(--shadow-hover);
@@ -527,47 +572,6 @@
             0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
             70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
             100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
-        }
-
-        /* Map Section - UPDATED for right column */
-        .map-container {
-            border-radius: 12px;
-            overflow: hidden;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            border: 1px solid var(--border);
-            grid-column: 2;
-            grid-row: 1;
-            align-self: start;
-        }
-        .map-header {
-            background: linear-gradient(90deg, #1e293b, #334155);
-            color: white;
-            padding: 16px;
-            text-align: center;
-            font-size: 1.3rem;
-            font-weight: 600;
-            border-bottom: 1px solid var(--border);
-        }
-        .map-image {
-            flex: 1;
-            background-color: #f1f5f9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            min-height: 400px;
-        }
-        .map-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            transition: transform 0.3s ease;
-        }
-        .map-container:hover .map-image img {
-            transform: scale(1.02);
         }
 
         /* Modal Controls for Fullscreen */
@@ -932,238 +936,61 @@
             font-size: 0.9rem;
         }
 
-        /* Compressor Report Styles */
-        .production-table-container {
+        /* Simple Team Attendance in Modals */
+        .team-summary {
             margin-top: 20px;
-        }
-        
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .section-header .section-title {
-            margin-bottom: 0;
-            left: 0;
-            transform: none;
-        }
-        
-        .target-badge {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .target-badge span {
-            background: linear-gradient(135deg, var(--success), var(--success-light));
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 600;
-            box-shadow: var(--shadow);
-        }
-        
-        .production-table-container table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            background: var(--card);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-        
-        .production-table-container th, .production-table-container td {
-            padding: 15px 20px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .production-table-container th {
-            background: linear-gradient(135deg, var(--warning), var(--warning-light));
-            color: white;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .production-table-container tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .production-table-container tr:hover {
-            background-color: rgba(0,0,0,0.02);
-        }
-        
-        .production-table-container .highlight {
-            background-color: rgba(245, 158, 11, 0.1);
-            font-weight: 600;
-        }
-        
-        .production-table-container .achievement-high {
-            color: var(--success);
-            font-weight: 700;
-        }
-        
-        .production-table-container .percentage {
-            color: var(--success);
-            font-weight: 600;
-        }
-
-        /* NEW: Responsibility Table Styles */
-        .responsibility-section {
-            margin-top: 30px;
-            padding: 20px;
+            padding: 15px;
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(59, 130, 246, 0.1));
             border-radius: 12px;
             border: 1px solid rgba(59, 130, 246, 0.2);
         }
         
-        .responsibility-title {
-            font-size: 1.3rem;
-            font-weight: 700;
+        .team-summary h3 {
+            font-size: 1.1rem;
             color: var(--primary);
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             text-align: center;
-            position: relative;
-            padding-bottom: 10px;
         }
         
-        .responsibility-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+        .team-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
         }
         
-        .responsibility-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
+        .team-member {
             background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        .responsibility-table th, .responsibility-table td {
-            padding: 14px 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .responsibility-table th {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .responsibility-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .responsibility-table tr:hover {
-            background-color: rgba(59, 130, 246, 0.05);
-        }
-        
-        .responsibility-table .present {
-            color: var(--success);
-            font-weight: 600;
-        }
-        
-        .responsibility-table .absent {
-            color: var(--danger);
-            font-weight: 600;
-        }
-        
-        .responsibility-table .update-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: background 0.3s;
-        }
-        
-        .responsibility-table .update-btn:hover {
-            background: var(--primary-light);
-        }
-        
-        .responsibility-table .status-dot {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
+        .team-member .status-dot {
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            margin-right: 8px;
         }
         
-        .responsibility-table .status-present {
+        .team-member .status-present {
             background-color: var(--success);
         }
         
-        .responsibility-table .status-absent {
+        .team-member .status-absent {
             background-color: var(--danger);
         }
         
-        /* NEW: Quarry Team Attendance in Compressor Box */
-        .quarry-attendance {
-            margin-top: 8px;
-            padding: 8px;
-            background: rgba(239, 68, 68, 0.05);
-            border-radius: 6px;
-            border: 1px solid rgba(239, 68, 68, 0.1);
-        }
-        
-        .quarry-attendance h4 {
-            font-size: 0.8rem;
-            color: var(--danger);
-            margin-bottom: 5px;
-            text-align: center;
+        .team-member-name {
+            font-size: 0.9rem;
             font-weight: 600;
         }
         
-        .quarty-attendance-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            margin-bottom: 3px;
-        }
-        
-        .quarty-attendance-row .label {
-            color: var(--text-light);
-        }
-        
-        .quarty-attendance-row .value {
-            color: var(--text);
-            font-weight: 600;
-        }
-        
-        .quarty-attendance-row .present {
-            color: var(--success);
-        }
-        
-        .quarty-attendance-row .absent {
-            color: var(--danger);
-        }
-        
-        .quarry-members {
-            margin-top: 8px;
+        .team-member-role {
             font-size: 0.7rem;
             color: var(--text-light);
-            text-align: center;
-            line-height: 1.3;
         }
 
         /* Production & Stock Modal Styles */
@@ -1352,11 +1179,52 @@
             background: var(--primary-light);
         }
 
+        /* Equipment Report Table */
+        .equipment-report {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+        
+        .equipment-report h3 {
+            color: var(--warning);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .equipment-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .equipment-table th, .equipment-table td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .equipment-table th {
+            background: linear-gradient(135deg, var(--warning), var(--warning-light));
+            color: white;
+            font-weight: 600;
+        }
+        
+        .equipment-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .equipment-table tr:hover {
+            background-color: rgba(0,0,0,0.02);
+        }
+
         /* Responsive */
         @media (max-width: 1400px) {
             .main-area { grid-template-columns: 1fr; }
             .map-container { 
-                height: 500px; 
+                height: 400px; 
                 grid-column: 1;
                 grid-row: 2;
             }
@@ -1394,10 +1262,6 @@
             .plant-running-hours .hours-value {
                 font-size: 1.8rem;
             }
-            .responsibility-table th, .responsibility-table td {
-                padding: 10px 12px;
-                font-size: 0.9rem;
-            }
         }
         
         @media (max-width: 600px) {
@@ -1431,21 +1295,6 @@
             .plant-running-hours .hours-label {
                 font-size: 0.8rem;
             }
-            .responsibility-table {
-                font-size: 0.85rem;
-            }
-            .responsibility-table th, .responsibility-table td {
-                padding: 8px 10px;
-            }
-            .quarry-attendance {
-                padding: 6px;
-            }
-            .quarry-attendance h4 {
-                font-size: 0.7rem;
-            }
-            .quarty-attendance-row {
-                font-size: 0.65rem;
-            }
         }
     </style>
 </head>
@@ -1462,7 +1311,7 @@
     <div class="container">
         <!-- Machines -->
         <div class="machines">
-            <!-- Compressors Running box with additional details and quarry team -->
+            <!-- Compressors Running box -->
             <div class="card mach-box comp comp-clickable" onclick="openModal('compressor-modal')">
                 <i class="fas fa-compress-arrows-alt mach-icon"></i>
                 <div class="mach-label">Compressors Running</div>
@@ -1471,60 +1320,23 @@
                     <div class="holes">558 holes</div>
                     <div class="feets">3,120 feets</div>
                 </div>
-                
-                <!-- NEW: Quarry Team Attendance -->
-                <div class="quarry-attendance">
-                    <h4><i class="fas fa-users"></i> Quarry Team</h4>
-                    <div class="quarty-attendance-row">
-                        <span class="label">Operators Present:</span>
-                        <span class="value present" id="quarry-present">8/10</span>
-                    </div>
-                    <div class="quarty-attendance-row">
-                        <span class="label">Supervisors:</span>
-                        <span class="value present" id="quarry-supervisors">3/3</span>
-                    </div>
-                    <div class="quarry-members">Rajesh, Mohan, Sanjay, Vikram +5 more</div>
-                </div>
             </div>
             <div class="card mach-box tipper tipper-clickable" onclick="openModal('tipper-modal')">
                 <i class="fas fa-truck mach-icon"></i>
                 <div class="mach-label">Tippers Available</div>
                 <div class="mach-value" id="tipper">11/12</div>
-                
-                <!-- NEW: Tipper Team Attendance -->
-                <div class="quarry-attendance" style="background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.1);">
-                    <h4><i class="fas fa-truck"></i> Tipper Team</h4>
-                    <div class="quarty-attendance-row">
-                        <span class="label">Drivers Present:</span>
-                        <span class="value present" id="tipper-present">11/12</span>
-                    </div>
-                    <div class="quarty-attendance-row">
-                        <span class="label">Supervisors:</span>
-                        <span class="value present" id="tipper-supervisors">2/2</span>
-                    </div>
-                    <div class="quarry-members">Ramesh, Sunil, Anil, Praveen +8 more</div>
-                </div>
             </div>
-            <div class="card mach-box exc-load">
+            <!-- Excavators/Loaders - Now clickable -->
+            <div class="card mach-box exc-load exc-load-clickable" onclick="openModal('excavator-loader-modal')">
                 <div class="combined-box">
-                    <div class="combined-item">
+                    <div class="combined-item" onclick="event.stopPropagation(); openModal('excavator-loader-modal');">
                         <span class="combined-label">Excavators Running</span>
                         <span class="combined-value" id="exc">4/5</span>
                     </div>
-                    <div class="combined-item">
+                    <div class="combined-item" onclick="event.stopPropagation(); openModal('excavator-loader-modal');">
                         <span class="combined-label">Loaders Running</span>
                         <span class="combined-value" id="load">2/2</span>
                     </div>
-                </div>
-                
-                <!-- Equipment Operators Attendance -->
-                <div class="quarry-attendance" style="background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.1); margin-top: 12px;">
-                    <h4><i class="fas fa-hard-hat"></i> Equipment Operators</h4>
-                    <div class="quarty-attendance-row">
-                        <span class="label">Present:</span>
-                        <span class="value present">6/7</span>
-                    </div>
-                    <div class="quarry-members">All equipment operational</div>
                 </div>
             </div>
             <div class="card mach-box ftd-mtd ftd-mtd-clickable" onclick="openModal('ftd-mtd-modal')">
@@ -1599,7 +1411,7 @@
                 </div>
             </div>
 
-            <!-- Right: Map - Updated to be in top-right corner -->
+            <!-- Right: Map - Now in top-right corner -->
             <div class="card map-container" onclick="openZoomModal('Live Operations Map', 'https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/Screenshot%202025-11-27%20081917.png')">
                 <div class="map-header">
                     <i class="fas fa-map-marked-alt"></i> Live Operations Map
@@ -1644,59 +1456,39 @@
                     </div>
                 </div>
                 
-                <!-- Responsibility Section for Quarry -->
-                <div class="responsibility-section">
-                    <div class="responsibility-title">
-                        <i class="fas fa-users"></i> Quarry Team - Today's Attendance & Work Update
+                <!-- Simplified Quarry Team Summary -->
+                <div class="team-summary">
+                    <h3><i class="fas fa-users"></i> Quarry Team - Today's Attendance</h3>
+                    <div class="team-list">
+                        <div class="team-member">
+                            <span class="status-dot status-present"></span>
+                            <div>
+                                <div class="team-member-name">Lokanath</div>
+                                <div class="team-member-role">Quarry Head</div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <span class="status-dot status-present"></span>
+                            <div>
+                                <div class="team-member-name">Amit</div>
+                                <div class="team-member-role">Day Shift In-charge</div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <span class="status-dot status-present"></span>
+                            <div>
+                                <div class="team-member-name">Ravi</div>
+                                <div class="team-member-role">Night Shift In-charge</div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <span class="status-dot status-present"></span>
+                            <div>
+                                <div class="team-member-name">Operators</div>
+                                <div class="team-member-role">8/10 Present</div>
+                            </div>
+                        </div>
                     </div>
-                    <table class="responsibility-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Designation</th>
-                                <th>Status</th>
-                                <th>Work Update</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Rajesh Kumar</td>
-                                <td>Quarry In-charge</td>
-                                <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Monitoring blast patterns, 558 holes completed</td>
-                                <td><button class="update-btn" onclick="updateWork('Rajesh Kumar')">Update</button></td>
-                            </tr>
-                            <tr>
-                                <td>Mohan Singh</td>
-                                <td>Excavator Operator</td>
-                                <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Operating Excavator #3, 245 tons excavated</td>
-                                <td><button class="update-btn" onclick="updateWork('Mohan Singh')">Update</button></td>
-                            </tr>
-                            <tr>
-                                <td>Sanjay Patel</td>
-                                <td>Compressor Operator</td>
-                                <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Running Compressor #5, 95 holes drilled</td>
-                                <td><button class="update-btn" onclick="updateWork('Sanjay Patel')">Update</button></td>
-                            </tr>
-                            <tr>
-                                <td>Vikram Yadav</td>
-                                <td>Loader Operator</td>
-                                <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Operating Loader #2, feeding crusher</td>
-                                <td><button class="update-btn" onclick="updateWork('Vikram Yadav')">Update</button></td>
-                            </tr>
-                            <tr>
-                                <td>Amit Sharma</td>
-                                <td>Safety Officer</td>
-                                <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Conducted safety inspection, all clear</td>
-                                <td><button class="update-btn" onclick="updateWork('Amit Sharma')">Update</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
@@ -1715,65 +1507,145 @@
                     <img src="https://raw.githubusercontent.com/bimal-bp/Live_Operation/main/WhatsApp%20Image%202025-11-27%20at%2010.19.28%20AM.jpeg" alt="Tippers Available Report" style="max-width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
                 </div>
                 
-                <!-- Responsibility Section for Tipper Team -->
-                <div class="responsibility-section">
-                    <div class="responsibility-title">
-                        <i class="fas fa-truck"></i> Tipper Team - Today's Attendance & Work Update
+                <!-- Simplified Tipper Team Summary -->
+                <div class="team-summary">
+                    <h3><i class="fas fa-truck"></i> Tipper Team - Today's Status</h3>
+                    <div class="team-list">
+                        <div class="team-member">
+                            <span class="status-dot status-present"></span>
+                            <div>
+                                <div class="team-member-name">Drivers</div>
+                                <div class="team-member-role">11/12 Present</div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <span class="status-dot status-present"></span>
+                            <div>
+                                <div class="team-member-name">Supervisors</div>
+                                <div class="team-member-role">2/2 Present</div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <span class="status-dot status-present"></span>
+                            <div>
+                                <div class="team-member-name">Maintenance</div>
+                                <div class="team-member-role">1 Tipper Under Repair</div>
+                            </div>
+                        </div>
                     </div>
-                    <table class="responsibility-table">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Excavators and Loaders -->
+    <div id="excavator-loader-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-hard-hat"></i> Excavators & Loaders Report</h2>
+                <button class="close-btn" onclick="closeModal('excavator-loader-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="equipment-report">
+                    <h3>Equipment Working Status</h3>
+                    <table class="equipment-table">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Designation</th>
-                                <th>Vehicle No.</th>
+                                <th>Equipment ID</th>
+                                <th>Type</th>
                                 <th>Status</th>
-                                <th>Work Update</th>
-                                <th>Action</th>
+                                <th>Running Hours</th>
+                                <th>Operator</th>
+                                <th>Remarks</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Ramesh Gupta</td>
-                                <td>Tipper Driver</td>
-                                <td>KA-05-AB-1234</td>
-                                <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Completed 9 trips, 270 tons transported</td>
-                                <td><button class="update-btn" onclick="updateWork('Ramesh Gupta')">Update</button></td>
+                                <td>EXC-001</td>
+                                <td>Excavator</td>
+                                <td><span style="color: var(--success); font-weight: 600;">Running</span></td>
+                                <td>8.2 hrs</td>
+                                <td>Rajesh</td>
+                                <td>Normal operation</td>
                             </tr>
                             <tr>
-                                <td>Sunil Kumar</td>
-                                <td>Tipper Driver</td>
-                                <td>KA-05-CD-5678</td>
-                                <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Completed 8 trips, 240 tons transported</td>
-                                <td><button class="update-btn" onclick="updateWork('Sunil Kumar')">Update</button></td>
+                                <td>EXC-002</td>
+                                <td>Excavator</td>
+                                <td><span style="color: var(--success); font-weight: 600;">Running</span></td>
+                                <td>7.8 hrs</td>
+                                <td>Mohan</td>
+                                <td>Loading boulders</td>
                             </tr>
                             <tr>
-                                <td>Anil Singh</td>
-                                <td>Tipper Driver</td>
-                                <td>KA-05-EF-9012</td>
-                                <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Completed 7 trips, 210 tons transported</td>
-                                <td><button class="update-btn" onclick="updateWork('Anil Singh')">Update</button></td>
+                                <td>EXC-003</td>
+                                <td>Excavator</td>
+                                <td><span style="color: var(--success); font-weight: 600;">Running</span></td>
+                                <td>6.5 hrs</td>
+                                <td>Sanjay</td>
+                                <td>Feeding crusher</td>
                             </tr>
                             <tr>
-                                <td>Praveen Reddy</td>
-                                <td>Transport Supervisor</td>
+                                <td>EXC-004</td>
+                                <td>Excavator</td>
+                                <td><span style="color: var(--success); font-weight: 600;">Running</span></td>
+                                <td>5.9 hrs</td>
+                                <td>Vikram</td>
+                                <td>Site excavation</td>
+                            </tr>
+                            <tr>
+                                <td>EXC-005</td>
+                                <td>Excavator</td>
+                                <td><span style="color: var(--danger); font-weight: 600;">Maintenance</span></td>
+                                <td>0 hrs</td>
                                 <td>-</td>
-                                <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Coordinating dispatch, 11 tippers operational</td>
-                                <td><button class="update-btn" onclick="updateWork('Praveen Reddy')">Update</button></td>
+                                <td>Hydraulic repair</td>
                             </tr>
                             <tr>
-                                <td>Kiran Mehta</td>
-                                <td>Maintenance In-charge</td>
-                                <td>-</td>
-                                <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                <td>Repairing Tipper #12, will be ready by evening</td>
-                                <td><button class="update-btn" onclick="updateWork('Kiran Mehta')">Update</button></td>
+                                <td>LDR-001</td>
+                                <td>Loader</td>
+                                <td><span style="color: var(--success); font-weight: 600;">Running</span></td>
+                                <td>9.1 hrs</td>
+                                <td>Amit</td>
+                                <td>Stockyard operation</td>
+                            </tr>
+                            <tr>
+                                <td>LDR-002</td>
+                                <td>Loader</td>
+                                <td><span style="color: var(--success); font-weight: 600;">Running</span></td>
+                                <td>8.7 hrs</td>
+                                <td>Ravi</td>
+                                <td>Feeding plant</td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                
+                <!-- Simplified Equipment Team Summary -->
+                <div class="team-summary">
+                    <h3><i class="fas fa-hard-hat"></i> Equipment Operators - Today's Status</h3>
+                    <div class="team-list">
+                        <div class="team-member">
+                            <span class="status-dot status-present"></span>
+                            <div>
+                                <div class="team-member-name">Operators</div>
+                                <div class="team-member-role">6/7 Present</div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <span class="status-dot status-present"></span>
+                            <div>
+                                <div class="team-member-name">Equipment</div>
+                                <div class="team-member-role">6/7 Operational</div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <span class="status-dot status-absent"></span>
+                            <div>
+                                <div class="team-member-name">Excavator-5</div>
+                                <div class="team-member-role">Under Maintenance</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1903,22 +1775,36 @@
                 </div>
                 
                 <!-- Quarry Team Summary -->
-                <div class="responsibility-section">
-                    <div class="responsibility-title">
-                        <i class="fas fa-users"></i> Quarry Team Summary - Today
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px;">
-                        <div style="background: linear-gradient(135deg, var(--danger-light), var(--danger)); padding: 15px; border-radius: 10px; color: white; text-align: center;">
-                            <div style="font-size: 0.9rem; opacity: 0.9;">Total Quarry Staff</div>
-                            <div style="font-size: 2rem; font-weight: 700;">23</div>
+                <div class="team-summary">
+                    <h3><i class="fas fa-users"></i> Quarry Team - Today's Summary</h3>
+                    <div class="team-list">
+                        <div class="team-member">
+                            <span class="status-dot status-present"></span>
+                            <div>
+                                <div class="team-member-name">Lokanath</div>
+                                <div class="team-member-role">Quarry Head</div>
+                            </div>
                         </div>
-                        <div style="background: linear-gradient(135deg, var(--success-light), var(--success)); padding: 15px; border-radius: 10px; color: white; text-align: center;">
-                            <div style="font-size: 0.9rem; opacity: 0.9;">Present Today</div>
-                            <div style="font-size: 2rem; font-weight: 700;">22</div>
+                        <div class="team-member">
+                            <span class="status-dot status-present"></span>
+                            <div>
+                                <div class="team-member-name">Amit</div>
+                                <div class="team-member-role">Day Shift</div>
+                            </div>
                         </div>
-                        <div style="background: linear-gradient(135deg, var(--warning-light), var(--warning)); padding: 15px; border-radius: 10px; color: white; text-align: center;">
-                            <div style="font-size: 0.9rem; opacity: 0.9;">Absent Today</div>
-                            <div style="font-size: 2rem; font-weight: 700;">1</div>
+                        <div class="team-member">
+                            <span class="status-dot status-present"></span>
+                            <div>
+                                <div class="team-member-name">Ravi</div>
+                                <div class="team-member-role">Night Shift</div>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <span class="status-dot status-present"></span>
+                            <div>
+                                <div class="team-member-name">Operators</div>
+                                <div class="team-member-role">8/10 Present</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1951,60 +1837,33 @@
                             </div>
                         </div>
                         
-                        <!-- Plant Team Responsibility Section -->
+                        <!-- Plant Team Summary -->
                         <div class="card">
-                            <div class="responsibility-section">
-                                <div class="responsibility-title">
-                                    <i class="fas fa-industry"></i> Plant Team - Today's Attendance & Work Update
+                            <div class="team-summary">
+                                <h3><i class="fas fa-industry"></i> Plant Team - Today's Status</h3>
+                                <div class="team-list">
+                                    <div class="team-member">
+                                        <span class="status-dot status-present"></span>
+                                        <div>
+                                            <div class="team-member-name">Plant Manager</div>
+                                            <div class="team-member-role">Present</div>
+                                        </div>
+                                    </div>
+                                    <div class="team-member">
+                                        <span class="status-dot status-present"></span>
+                                        <div>
+                                            <div class="team-member-name">Supervisors</div>
+                                            <div class="team-member-role">3/3 Present</div>
+                                        </div>
+                                    </div>
+                                    <div class="team-member">
+                                        <span class="status-dot status-present"></span>
+                                        <div>
+                                            <div class="team-member-name">Operators</div>
+                                            <div class="team-member-role">12/12 Present</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <table class="responsibility-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Designation</th>
-                                            <th>Status</th>
-                                            <th>Work Update</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Arun Malhotra</td>
-                                            <td>Plant Manager</td>
-                                            <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                            <td>Plant running at 44.6% efficiency</td>
-                                            <td><button class="update-btn" onclick="updateWork('Arun Malhotra')">Update</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Suresh Nair</td>
-                                            <td>Production Supervisor</td>
-                                            <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                            <td>2120 tons produced today</td>
-                                            <td><button class="update-btn" onclick="updateWork('Suresh Nair')">Update</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Deepak Joshi</td>
-                                            <td>Maintenance Engineer</td>
-                                            <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                            <td>Performing routine maintenance</td>
-                                            <td><button class="update-btn" onclick="updateWork('Deepak Joshi')">Update</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ravi Shankar</td>
-                                            <td>Quality Control</td>
-                                            <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                            <td>Testing 10mm & 20mm aggregates</td>
-                                            <td><button class="update-btn" onclick="updateWork('Ravi Shankar')">Update</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Manish Tiwari</td>
-                                            <td>Stock In-charge</td>
-                                            <td><span class="status-dot status-present"></span> <span class="present">Present</span></td>
-                                            <td>Managing godown stock of 44,781 tons</td>
-                                            <td><button class="update-btn" onclick="updateWork('Manish Tiwari')">Update</button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
@@ -2423,18 +2282,16 @@
             document.querySelector('.compressor-details .holes').textContent = `${holes} holes`;
             document.querySelector('.compressor-details .feets').textContent = `${feets.toLocaleString()} feets`;
             
-            // Update quarry team attendance
-            const quarryPresent = 7 + rand(0, 2);
-            document.getElementById('quarry-present').textContent = `${quarryPresent}/10`;
-            
             document.getElementById('tipper').textContent = `${8+rand(0,4)}/12`;
             
-            // Update tipper team attendance
-            const tipperPresent = 10 + rand(0, 2);
-            document.getElementById('tipper-present').textContent = `${tipperPresent}/12`;
+            // Excavators and Loaders - Make them dynamic
+            const excRunning = 4 + rand(0, 1);
+            const excTotal = 5;
+            document.getElementById('exc').textContent = `${excRunning}/${excTotal}`;
             
-            document.getElementById('exc').textContent = `${4+rand(0,1)}/5`;
-            document.getElementById('load').textContent = `2/2`;
+            const loadRunning = 2;
+            const loadTotal = 2;
+            document.getElementById('load').textContent = `${loadRunning}/${loadTotal}`;
 
             // Boulder Operations
             const trips = 30 + rand(0, 30);
@@ -2510,15 +2367,6 @@
             document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', options);
         }
         
-        // Update work function for team members
-        function updateWork(name) {
-            const newUpdate = prompt(`Enter work update for ${name}:`);
-            if (newUpdate) {
-                alert(`Work update for ${name} has been saved: "${newUpdate}"`);
-                // In a real application, you would send this to a server
-            }
-        }
-        
         // Modal functions
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'flex';
@@ -2581,6 +2429,16 @@
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
                 });
+            });
+            
+            // Make Excavator/Loader box clickable
+            const excLoadBox = document.querySelector('.exc-load');
+            const combinedItems = document.querySelectorAll('.combined-item');
+            
+            excLoadBox.classList.add('exc-load-clickable');
+            
+            combinedItems.forEach(item => {
+                item.style.cursor = 'pointer';
             });
         });
         
